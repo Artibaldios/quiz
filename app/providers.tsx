@@ -5,7 +5,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import React, { useState } from "react";
 
-export default function Providers({ children, session }: { children: React.ReactNode, session: Session }) {
+type Props = {
+  children: React.ReactNode;
+  session?: Session;
+};
+
+export default function Providers({ children, session }:  Props ) {
   // Create QueryClient once on mount to persist it on the client
   const [queryClient] = useState(() => new QueryClient());
 
