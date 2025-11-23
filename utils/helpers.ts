@@ -1,9 +1,17 @@
 interface Question {
-  _id: string;
-  question: string;
+  id: string | number;
+  question_text: string;
   options: string[];
-  correct_answer: number;
+  correct_answer: string;
   topic: string;
+}
+
+interface QuestionWithAnswer {
+  question_text: string;
+  options: string[];
+  correct_answer: string;
+  topic: string;
+  user_answer: string;
 }
 
 interface QuizResult {
@@ -11,11 +19,11 @@ interface QuizResult {
   totalCorrect: number;
   totalQuestions: number;
   topicScores: Record<string, { correct: number; total: number }>;
-  questionsWithAnswers: any;
+  questionsWithAnswers?: QuestionWithAnswer[];
 }
 
 // Pure function to calculate quiz results locally
-export function calculateQuizResult(questions: Question[], answers: number[]): QuizResult {
+export function calculateQuizResult(questions: Question[], answers: string[]): QuizResult {
   let totalCorrect = 0;
   const topicScores: Record<string, { correct: number; total: number }> = {};
 
@@ -44,10 +52,10 @@ export function calculateQuizResult(questions: Question[], answers: number[]): Q
     totalQuestions: questions.length,
     topicScores,
     questionsWithAnswers: questions.map((question, index) => ({
-      question: question?.question || "",
+      question_text: question?.question_text || "",
       options: question?.options || [],
-      correctAnswer: question?.correct_answer || 0,
-      userAnswer: answers[index],
+      correct_answer: question?.correct_answer || "",
+      user_answer: answers[index] || "",
       topic: question?.topic || "",
     })),
   };

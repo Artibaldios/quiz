@@ -1,0 +1,16 @@
+{
+  "homePage": {
+    "description": "Проверьте свои знания по разным темам. Ответьте на 10 вопросов и посмотрите, как вы справитесь!",
+    "startButton": "Старт",
+    "resultsButton": "Результаты"
+  },
+  "navMenu":{
+    "description": "Test your knowledge across different topics. Answer 10 questions and see how you perform!",
+    "startButton": "Start",
+    "resultsButton": "View Results"
+  },
+  "LocaleSwitcher": {
+    "locale": "ru",
+    "anotherKey": "Another string"
+  }
+}

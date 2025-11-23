@@ -1,0 +1,43 @@
+"use client";
+import { NextIntlClientProvider } from 'next-intl';
+import en from '@/locales/en.json';
+import ru from '@/locales/ru.json';
+import { SessionProvider } from 'next-auth/react';
+import { Session } from "next-auth";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import React, { useState } from "react";
+import { Provider } from 'react-redux';
+import { store } from '../../redux/store';
+import { ThemeProvider } from '@/components/ThemeProvider';
+type Locale = 'en' | 'ru';
+const messages: Record<Locale, any> = {
+  en,
+  ru,
+};
+
+type Props = {
+  children: React.ReactNode;
+  session?: Session;
+  params: { locale: string; }
+};
+
+export default function Providers({ children, session, params }: Props) {
+  const locale = params.locale;
+  const localeMessages = messages[locale as Locale] || messages.en;
+  const [queryClient] = useState(() => new QueryClient());
+  return (
+    <SessionProvider session={session} refetchInterval={0} refetchOnWindowFocus={false}>
+      <QueryClientProvider client={queryClient}>
+        <NextIntlClientProvider locale={locale} messages={localeMessages} timeZone="UTC">
+          <ThemeProvider>
+            <Provider store={store}>
+              {children}
+            </Provider>
+          </ThemeProvider>
+        </NextIntlClientProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </SessionProvider>
+  );
+}

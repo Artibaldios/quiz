@@ -1,20 +1,14 @@
 import NextAuth from "next-auth";
-import PostgresAdapter from "@auth/pg-adapter"
-import CredentialsProvider from "next-auth/providers/credentials"
-import { Pool } from "pg"
+import CredentialsProvider from "next-auth/providers/credentials";
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import bcrypt from "bcrypt";
+import { PrismaClient } from '@prisma/client';
 
-const pool = new Pool({
-  host: process.env.DATABASE_HOST,
-  user: process.env.DATABASE_USER,
-  password: process.env.DATABASE_PASSWORD,
-  database: process.env.DATABASE_NAME,
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-})
+const prisma = new PrismaClient();
+
 
 const authOptions = {
-  adapter: PostgresAdapter(pool),
+  adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -25,28 +19,62 @@ const authOptions = {
       authorize: async (credentials) => {
         if (!credentials) return null;
 
-        // const res = await pool.query(
-        //   "SELECT id, email, name FROM users WHERE email = $1 AND password = crypt($2, password)",
-        //   [credentials.username, credentials.password]
-        // );
-        const res = await pool.query(
-            "SELECT id, email, name FROM users WHERE name = $1 AND password = $2",
-            [credentials.username, credentials.password]
-        );
-        console.log(credentials)
-        if (res.rowCount === 1) {
-          const user = res.rows[0];
-          return { id: user.id, email: user.email, name: user.name };
+        const user = await prisma.user.findFirst({
+          where: {
+            name: credentials.username,
+          },
+        });
+
+        if (!user || !user.password) {
+          return null;
         }
 
-        return null; // authentication failed
+        const isValid = await bcrypt.compare(credentials.password, user.password);
+        if (!isValid) return null;
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        };
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token.user) {
+        session.user = token.user;
+      }
+      return session;
+    },
+    async redirect({ url, baseUrl }) {
+      // Prevent recursive callbackUrl appending
+      if (url.includes("callbackUrl=")) {
+        const urlObj = new URL(url);
+        const originalCallbackUrl = urlObj.searchParams.get("callbackUrl");
+        if (originalCallbackUrl) return originalCallbackUrl;
+      }
+      if (url.startsWith("/")) return baseUrl + url;
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
+    }
+  },
+  pages: {
+    signIn: "/en/login",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 const authHandler = NextAuth(authOptions);
 
-// Export GET and POST functions for Next.js route handlers
 export const GET = authHandler;
 export const POST = authHandler;
