@@ -3,6 +3,12 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+interface QuizAnswers {
+  questionId: number | string;
+  givenAnswer: string;
+  isCorrect: boolean;
+}
+
 export async function POST(req: Request) {
   try {
     const { userId, quizId, score, answers } = await req.json();
@@ -13,7 +19,7 @@ export async function POST(req: Request) {
         quizId,
         score,
         userAnswers: {
-          create: answers.map((a: any) => ({
+          create: answers.map((a: QuizAnswers) => ({
             questionId: a.questionId,
             givenAnswer: a.givenAnswer,
             isCorrect: a.isCorrect,

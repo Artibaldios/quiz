@@ -10,8 +10,11 @@ import React, { useState } from "react";
 import { Provider } from 'react-redux';
 import { store } from '../../redux/store';
 import { ThemeProvider } from '@/components/ThemeProvider';
+interface Messages {
+  [key: string]: string | Messages;
+}
 type Locale = 'en' | 'ru';
-const messages: Record<Locale, any> = {
+const messages: Record<Locale, Messages> = {
   en,
   ru,
 };

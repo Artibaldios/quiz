@@ -43,6 +43,6 @@ export async function GET(
       questions: localizedQuestions,
     });
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch quiz' }, { status: 500 });
+    return NextResponse.json({ error: `Failed to fetch quiz: ${error}` }, { status: 500 });
   }
 }

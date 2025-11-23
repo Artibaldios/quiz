@@ -10,9 +10,9 @@ export default  function QuizResults() {
 
   const topicScores = Object.entries(quizResult?.topicScores).map(([topic, scores]) => ({
     topic,
-    percentage: Math.round(((scores as any).correct / (scores as any).total) * 100),
-    correct: (scores as any).correct,
-    total: (scores as any).total,
+    percentage: Math.round((scores.correct / scores.total) * 100),
+    correct: scores.correct,
+    total: scores.total,
   }));
   
 

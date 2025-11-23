@@ -8,7 +8,7 @@ interface QuestionWithAnswer {
   user_answer: string;
 }
 
-interface QuizResult {
+export interface QuizResult {
   score: number;
   totalCorrect: number;
   totalQuestions: number;
