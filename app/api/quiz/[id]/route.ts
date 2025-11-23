@@ -25,9 +25,9 @@ function isLocalizedText(value: unknown): value is LocalizedText {
     typeof value === 'object' &&
     value !== null &&
     'en' in value &&
-    typeof (value as any).en === 'string' &&
+    typeof (value as Option).en === 'string' &&
     'ru' in value &&
-    typeof (value as any).ru === 'string'
+    typeof (value as Option).ru === 'string'
   );
 }
 
