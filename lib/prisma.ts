@@ -1,11 +1,10 @@
-import 'dotenv/config'
 import { PrismaClient } from '@/prisma/generated/client'
 import { withAccelerate } from '@prisma/extension-accelerate'
 
 const prismaClientSingleton = () => {
   // Create database adapter
 const prisma = new PrismaClient({
-  accelerateUrl: process.env.DATABASE_URL,
+  accelerateUrl: process.env.ACCELERATE_URL,
 }).$extends(withAccelerate())
   return prisma
 }
