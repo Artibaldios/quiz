@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient, Prisma } from '@prisma/client';
+import { Prisma } from '@/prisma/generated/client';
+import { prisma } from "@/lib/prisma";
 
-const prisma = new PrismaClient();
 type Lang = 'en' | 'ru';
 type JsonValue = Prisma.JsonValue;
 interface DbQuizQuestion {
@@ -59,7 +59,9 @@ export async function GET(
     if (!quiz) {
       return NextResponse.json({ error: 'Quiz not found' }, { status: 404 });
     }
-
+    // Map results to return language-specific title
+    const localizedtitle = isLocalizedText(quiz.title) ? quiz.title: { en: 'No title', ru: 'Нет темы' }
+    const localizedQuiz = {...quiz, title: localizedtitle[lang as Lang] || localizedtitle.en}
     // Map questions to contain only requested language text/options
     const localizedQuestions = quiz.questions.map((q: DbQuizQuestion) => {
       const topic = isLocalizedText(q.topic) ? q.topic : { en: 'No topic', ru: 'Нет темы' };
@@ -78,7 +80,7 @@ export async function GET(
 
     // Return quiz with localized questions
     return NextResponse.json({
-      ...quiz,
+      ...localizedQuiz,
       questions: localizedQuestions,
     });
   } catch (error) {

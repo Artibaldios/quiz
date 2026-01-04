@@ -1,41 +1,42 @@
 "use client"
+import QuizLeaderboard from '@/components/QuizLeaderBoard';
+import QuizSearch from '@/components/QuizSearch';
 import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/navigation';
-import { useSelector } from 'react-redux';
-import type { RootState } from '../../redux/store';
 
 export default function Home() {
-  const t = useTranslations('homePage');
-  const quizResult = useSelector((state: RootState) => state.quiz.quizResult)
+  const t = useTranslations("homePage");
 
   return (
-    <div className="h-full flex flex-col bg-bgColor">
-      <main className="flex-1 flex items-center justify-center p-8">
-        <div className="w-full max-w-4xl mx-auto">
-          <div className="flex flex-col gap-8">
-            <div className="text-center">
-              <h1 className="text-5xl font-bold text-primary mb-4">Quiz Master</h1>
-              <p className="text-lg text-textColor mb-8">
-                {t('description')}
-              </p>
-              <div className="flex gap-4 justify-center">
-                <Link
-                  href="/quiz"
-                  className="px-8 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors shadow-sm hover:shadow"
-                >{t('startButton')}
-                </Link>
-                {quizResult && quizResult.questionsWithAnswers ? (
-                  <Link
-                  href="/results"
-                  className="px-8 py-3 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition-colors shadow-sm hover:shadow"
-                >{t('resultsButton')}
-                </Link>
-                ) : null}
-              </div>
-            </div>
-          </div>
+    <div className="h-full flex flex-col bg-dark-100 dark:bg-bgContent rounded-md mx-2">
+      <div className="relative bg-card rounded-3xl shadow-cardGeometric p-10 overflow-hidden group">
+        {/* Geometric Grid Pattern */}
+        <div className="absolute inset-0 opacity-[0.04]">
+          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="1" className="text-foreground" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#grid)" />
+          </svg>
         </div>
-      </main>
+
+        {/* Floating Geometric Shapes */}
+        <div className="absolute top-12 right-8 md:right-16 w-10 h-10  md:w-20 md:h-20 border-2 border-primary rotate-45 animate-float-slow" />
+        <div className="absolute bottom-10 left-8 md:left-16 w-12 h-12 bg-primary/50 rotate-12 animate-float-delayed" />
+        <div className="absolute bottom-4 right-8 md:right-16 w-6 h-6 bg-primary/30 rounded-full animate-float-soft" />
+        <div className="absolute top-1/4 left-8 md:left-16 w-6 h-6 bg-primary/30 rounded-full animate-float-soft" />
+        <div className="relative z-10">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl leading-10 md:leading-18 font-bold text-center mb-4 bg-primary bg-clip-text text-transparent tracking-tight">
+            {t("title")}
+          </h1>
+          <p className="text-center text-muted-foreground mb-0 text-lg max-w-md mx-auto dark:text-textColor">
+            {t("description")}
+          </p>
+        </div>
+      </div>
+      <QuizSearch />
+      <QuizLeaderboard />
     </div>
   );
 }

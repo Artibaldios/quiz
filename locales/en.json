@@ -1,16 +1,72 @@
 {
   "homePage": {
-    "description": "Test your knowledge across different topics. Answer 10 questions and see how you perform!",
-    "startButton": "Start",
-    "resultsButton": "View Results"
+    "title": "Test your knowledge",
+    "description": "Discover hundreds of quizzes across all topics",
+    "placeholderText": "Search quizzes...",
+    "popularQuizCarousel": "Popular Quizzes",
+    "latestQuizCarousel": "Latest Quizzes",
+    "leaderBoard": "Leaderboard",
+    "top": "Top quiz performers",
+    "accuracy": "Accuracy",
+    "rightAnswers": "Right Answers",
+    "quizzesPlayed": "quizzes played",
+    "from": "from",
+    "questions": "questions",
+    "upd": "Updated just now",
+    "notFound": "No Data found",
+    "notAvailable": "No quizzes available"
   },
-  "navMenu":{
-    "description": "Test your knowledge across different topics. Answer 10 questions and see how you perform!",
-    "startButton": "Start",
-    "resultsButton": "View Results"
+  "quizPage": {
+    "question": "Question",
+    "of": "of",
+    "submitting": "Submitting...",
+    "submitQuiz": "submit Quiz",
+    "nextQuestion": "next question",
+    "notAvailbale": "No available questions"
+  },
+  "quizResultsPage": {
+    "quizResults": "Quiz Results",
+    "youGot": "You got",
+    "outOf": "out of",
+    "correctQuestions": "correct questions",
+    "PerformanceByTopic": "Performance by Topic",
+    "correct": "correct",
+    "questionReview": "Question Review",
+    "yourAnswer": "Your answer: ",
+    "correctAnswer": "Correct answer: ",
+    "BackToHome": "Back to Home",
+    "notFound": "Something went wrong"
+  },
+  "Profile":{
+    "refresh": "Refresh",
+    "noData": "Something went wrong",
+    "welcome": "welcome",
+    "quizMaster": "quiz Master",
+    "progress": "Track your quiz performance and progress",
+    "accuracy": "Accuracy",
+    "quizzesTaken": "Quizzes Taken",
+    "perfectScores": "Perfect Scores",
+    "correctAnswers": "Correct Answers",
+    "totalQuestions":"Total Questions",
+    "recentActivity": "Recent Activity",
+    "completeHistory": "Complete History",
+    "quizHistory": "Quiz History",
+    "total": "total quizzes completed"
+
+  },
+  "quizCard": {
+    "questions": "Questions",
+    "played": "Played",
+    "playButton": "Play"
+  },
+  "navMenu": {
+    "profile": "Profile",
+    "lightTheme": "Light Theme",
+    "darkTheme": "Dark Theme",
+    "language": "Language",
+    "logout": "Logout"
   },
   "LocaleSwitcher": {
-    "locale": "en",
-    "anotherKey": "Another string"
+    "locale": "Language: English"
   }
 }

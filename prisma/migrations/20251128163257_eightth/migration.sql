@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Quiz" ADD COLUMN     "level" TEXT,
+ADD COLUMN     "plays" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "questionCount" INTEGER NOT NULL DEFAULT 0;

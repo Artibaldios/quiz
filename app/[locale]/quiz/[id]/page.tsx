@@ -3,17 +3,22 @@ import { useState } from "react";
 import { useQuery } from '@tanstack/react-query'
 import { calculateQuizResult } from "@/utils/helpers";
 import { useSession } from "next-auth/react";
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useDispatch } from 'react-redux';
 import { addQuizResult } from "@/redux/quizSlice";
 import { useRouter } from '@/i18n/navigation';
+import { useParams } from 'next/navigation';
+import Loader from "@/components/Loader";
 
-async function fetchQuestions({ queryKey }: { queryKey: [string, string] }) {
-  const [, locale] = queryKey;
-  const response = await fetch(`/api/quiz/1?lang=${locale}`);
+type QuizParams = { id: string, locale: string };
+
+async function fetchQuestions({ queryKey }: { queryKey: [string, string, number] }) {
+  const [, locale, id] = queryKey;
+  const response = await fetch(`/api/quiz/${id}?lang=${locale}`);
   if (!response.ok) {
     throw new Error('Failed to get quiz');
   }
+  
   return response.json();
 }
 
@@ -30,27 +35,38 @@ async function submitQuizResults(userId: string, quizId: number, score: number, 
   return response.json();
 }
 
-export default function Quiz() {
+export default function QuizPage() {
   const dispatch = useDispatch();
   const locale = useLocale();
   const router = useRouter();
+  const params = useParams<QuizParams>();
+  const t = useTranslations("quizPage");
+  const quizId = params.id ? parseInt(params.id, 10) : NaN;
+  const hasValidId = !isNaN(quizId);
+
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["questions", locale],
+    queryKey: ["questions", locale, quizId],
     queryFn: fetchQuestions,
+    enabled: hasValidId,
   });
+
   const questions = data?.questions;
   const { data: session, status } = useSession();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  console.log(selectedAnswer)
-  if (isLoading) return <div>Loading...</div>
 
-  if (questions.length === 0) {
+  if (isLoading) return (
+    <div className="min-h-[400px] flex items-center justify-center">
+      <Loader variant="spinner" color="blue" size="xl" />
+    </div>
+  )
+
+  if (questions?.length === 0) {
     return (
       <div className="text-center">
-        <p className="text-lg text-gray-600">No questions available. Please try again later.</p>
+        <p className="text-lg text-gray-600">{t("notAvailbale")}</p>
       </div>
     );
   }
@@ -103,12 +119,12 @@ export default function Quiz() {
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
   return (
-    <div className="flex flex-col justify-center items-center max-w-full">
-      <div className="w-full mb-8 md:max-w-96">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-primary">Quiz</h2>
-          <span className="text-sm text-textColor">
-            Question {currentQuestionIndex + 1} of {questions.length}
+    <div className="flex flex-col justify-center items-center max-w-full m-2">
+      <div className="w-full mb-8 px-2 md:max-w-104">
+        <div className="flex justify-between items-center my-2">
+          <h2 className="text-lg md:text-2xl font-bold text-primary">{data.title}</h2>
+          <span className="text-sm text-textColor text-nowrap">
+            {t("question")} {currentQuestionIndex + 1} {t("of")} {questions.length}
           </span>
         </div>
         <div className="w-full bg-white rounded-full h-2">
@@ -152,17 +168,17 @@ export default function Quiz() {
           <button
             onClick={handleNext}
             disabled={selectedAnswer === null || isSubmitting}
-            className="px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors shadow-sm hover:shadow disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors shadow-sm hover:shadow disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {isSubmitting ? (
               <div className="flex items-center gap-2">
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                Submitting...
+                {t("submitting")}
               </div>
             ) : isLastQuestion ? (
-              "Submit Quiz"
+              t("submitQuiz")
             ) : (
-              "Next Question"
+              t("nextQuestion")
             )}
           </button>
         </div>

@@ -1,24 +1,28 @@
 generator client {
   provider = "prisma-client-js"
+  output     = "../prisma/generated/client"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
-  id            String          @id @default(cuid())
-  name          String?         @unique
-  email         String          @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  password      String
-  quizResults   UserQuizResult[]
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  id                String           @id @default(cuid())
+  name              String?          @unique
+  email             String           @unique
+  emailVerified     DateTime?
+  image             String?
+  password          String
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  totalQuestions    Int              @default(0)
+  totalRightAnswers Int              @default(0)
+  accuracy          Int              @default(0)
+  quizzesPlayed     Int              @default(0)
+  accounts          Account[]
+  sessions          Session[]
+  quizResults       UserQuizResult[]
 }
 
 model Account {
@@ -33,11 +37,9 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
 }
@@ -46,10 +48,9 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model VerificationToken {
@@ -61,36 +62,40 @@ model VerificationToken {
 }
 
 model Quiz {
-  id        Int        @id @default(autoincrement())
-  title     String
-  questions Question[] 
+  id            Int        @id @default(autoincrement())
+  level         String?
+  plays         Int        @default(0)
+  questionCount Int        @default(0)
+  createdAt     DateTime   @default(now())
+  title         Json
+  questions     Question[]
 }
 
 model Question {
-  id             Int     @id @default(autoincrement())
+  id             Int  @id @default(autoincrement())
   quizId         Int
-  quiz           Quiz    @relation(fields: [quizId], references: [id], onDelete: Cascade) 
   topic          Json
   question_text  Json
   options        Json
-  correct_answer Json     
+  correct_answer Json
+  quiz           Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
 }
 
 model UserQuizResult {
-  id          Int             @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   userId      String
   quizId      Int
   score       Int
-  createdAt   DateTime        @default(now())
-  user        User            @relation(fields: [userId], references: [id])
-  userAnswers UserAnswer[]    
+  createdAt   DateTime     @default(now())
+  userAnswers UserAnswer[] 
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model UserAnswer {
-  id               Int             @id @default(autoincrement())
+  id               Int            @id @default(autoincrement())
   userQuizResultId Int
   questionId       Int
   givenAnswer      String
   isCorrect        Boolean
-  userQuizResult   UserQuizResult  @relation(fields: [userQuizResultId], references: [id])
+  userQuizResult   UserQuizResult @relation(fields: [userQuizResultId], references: [id], onDelete: Cascade)
 }

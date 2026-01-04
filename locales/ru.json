@@ -1,16 +1,71 @@
 {
   "homePage": {
-    "description": "Проверьте свои знания по разным темам. Ответьте на 10 вопросов и посмотрите, как вы справитесь!",
-    "startButton": "Старт",
-    "resultsButton": "Результаты"
+    "title": "Проверь свои знания",
+    "description": "Открой для себя сотни квизов по различным темам",
+    "placeholderText": "Искать квизы...",
+    "popularQuizCarousel": "Популярные квизы",
+    "latestQuizCarousel": "Недавние квизы",
+    "leaderBoard": "Таблица лидеров",
+    "top": "Лучшие участники викторин",
+    "accuracy": "Точность",
+    "rightAnswers": "Правильные ответы",
+    "quizzesPlayed": "сыграно квизов",
+    "from": "из",
+    "questions": "вопросов",
+    "upd": "Обновлено только что",
+    "notFound": "не найдено",
+    "notAvailable": "нет доступных визов"
   },
-  "navMenu":{
-    "description": "Test your knowledge across different topics. Answer 10 questions and see how you perform!",
-    "startButton": "Start",
-    "resultsButton": "View Results"
+  "quizPage": {
+    "question": "Вопорос",
+    "of": "из",
+    "submitting": "Отправляем...",
+    "submitQuiz": "отправить Квиз",
+    "nextQuestion": "следующий вопрос",
+    "notAvailbale": "Нет доступных вопросов"
+  },
+  "quizResultsPage": {
+    "quizResults": "Результаты квиза",
+    "youGot": "Ты получил",
+    "outOf": "из",
+    "correctQuestions": "правильных ответов",
+    "PerformanceByTopic": "Производительность по темам",
+    "correct": "вопросов",
+    "questionReview": "Обзор вопросов",
+    "yourAnswer": "Твой ответ: ",
+    "correctAnswer": "Правильный ответ: ",
+    "BackToHome": "Вернуться домой",
+    "notFound": "Что-то пошло не так"
+  },
+  "Profile":{
+    "refresh": "Refresh",
+    "noData": "Something went wrong",
+    "welcome": "welcome",
+    "quizMaster": "quiz Master",
+    "progress": "Отслеживайте свои результаты и прогресс",
+    "accuracy": "Точность",
+    "quizzesTaken": "Пройденные квизы",
+    "perfectScores": "Идеальные результаты",
+    "correctAnswers": "Правильные ответы",
+    "totalQuestions":"Всего вопросов",
+    "recentActivity": "Недавняя Активность",
+    "completeHistory": "Полная История",
+    "quizHistory": "История квизов",
+    "total": "пройденных квизов"
+  },
+  "quizCard": {
+    "questions": "Вопросы",
+    "played": "Сыграли",
+    "playButton": "Играть"
+  },
+  "navMenu": {
+    "profile": "Профиль",
+    "lightTheme": "Светлая тема",
+    "darkTheme": "Темная тема",
+    "language": "Language",
+    "logout": "Выйти"
   },
   "LocaleSwitcher": {
-    "locale": "ru",
-    "anotherKey": "Another string"
+    "locale": "Язык: Русский"
   }
 }

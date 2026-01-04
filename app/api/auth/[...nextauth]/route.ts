@@ -2,10 +2,10 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import bcrypt from "bcrypt";
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
-
+import { prisma } from "@/lib/prisma";
+import type { SessionStrategy } from "next-auth"
+import { DefaultSession } from "next-auth";
+import { JWT } from "next-auth/jwt";
 
 const authOptions = {
   adapter: PrismaAdapter(prisma),
@@ -41,22 +41,10 @@ const authOptions = {
     }),
   ],
   session: {
-    strategy: "jwt",
+    strategy: "jwt" as SessionStrategy,
   },
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.user = user;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (token.user) {
-        session.user = token.user;
-      }
-      return session;
-    },
-    async redirect({ url, baseUrl }) {
+    async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
       // Prevent recursive callbackUrl appending
       if (url.includes("callbackUrl=")) {
         const urlObj = new URL(url);
@@ -66,7 +54,23 @@ const authOptions = {
       if (url.startsWith("/")) return baseUrl + url;
       else if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
-    }
+    },
+    jwt: async ({ token, user }: { token: JWT; user?: { id: string } }) => {
+      if (user?.id) {
+        token.id = user.id;
+      }
+      return token;
+    },
+
+    session: async ({ session, token }: {
+      session: DefaultSession & { user: { id?: string } };
+      token: JWT & { id?: string }
+    }) => {
+      if (token?.id && session?.user) {
+        session.user.id = token.id;
+      }
+      return session;
+    },
   },
   pages: {
     signIn: "/en/login",
