@@ -161,3 +161,16 @@ export function detectLanguage(q: string): 'en' | 'ru' {
   const hasCyrillic = /[\u0400-\u04FF]/.test(q);
   return hasCyrillic ? 'ru' : 'en';
 }
+
+export async function submitQuizResults(userId: string, quizId: number, score: number, answers: Array<{ questionId: number | string; givenAnswer: number | string; isCorrect: boolean }>) {
+  const response = await fetch('/api/quiz/results', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userId, quizId, score, answers }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to submit quiz results');
+  }
+  return response.json();
+}

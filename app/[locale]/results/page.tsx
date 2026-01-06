@@ -4,6 +4,7 @@ import type { RootState } from '../../../redux/store';
 import { useSelector } from 'react-redux';
 import { DynamicProgress } from '@/components/DynamicProgress';
 import { useTranslations } from 'next-intl';
+import { useMemo } from "react";
 
 export default function QuizResults() {
   const quizResult = useSelector((state: RootState) => state.quiz.quizResult)
@@ -13,32 +14,39 @@ export default function QuizResults() {
     <div className='min-h-[400px] flex flex-col justify-center items-center'>
       <p className='text-center text-4xl text-textColor'>{t("notFound")}</p>
       <div className="text-center flex gap-4 justify-center items-center m-4 md:w-48">
-        <Link
-          href="/"
-          className="w-full px-8 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors shadow-sm hover:shadow"
-        >
-          <p>{t("BackToHome")}</p>
-        </Link>
+        <BackToHomeButton className="md:w-48"/>
       </div>
     </div>
   )
 
-  const topicScores = Object.entries(quizResult?.topicScores).map(([topic, scores]) => ({
-    topic,
-    percentage: Math.round((scores.correct / scores.total) * 100),
-    correct: scores.correct,
-    total: scores.total,
-  }));
+  const topicScores = useMemo(() => {
+    if (!quizResult) return [];
+    return Object.entries(quizResult.topicScores).map(([topic, scores]) => ({
+      topic,
+      percentage: scores.total === 0 ? 0 : Math.round((scores.correct / scores.total) * 100),
+      correct: scores.correct,
+      total: scores.total,
+    }));
+  }, [quizResult]);
+
+  const { totalCorrect, totalQuestions } = useMemo(() => {
+    return topicScores.reduce(
+      (acc, topic) => ({
+        totalCorrect: acc.totalCorrect + topic.correct,
+        totalQuestions: acc.totalQuestions + topic.total,
+      }),
+      { totalCorrect: 0, totalQuestions: 0 }
+    );
+  }, [topicScores]);
 
 
   return (
     <div className=" flex flex-col items-center justify-center mx-2">
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-primary mb-4">{t("quizResults")}</h2>
-        <DynamicProgress targetValue={quizResult?.score}/>
+        <DynamicProgress targetValue={quizResult.score}/>
         <p className="text-lg text-textColor">
-          {t("youGot")} {topicScores.reduce((sum, topic) => sum + topic.correct, 0)} {t("outOf")} {" "}
-          {topicScores.reduce((sum, topic) => sum + topic.total, 0)} {t("correctQuestions")}
+          {t("youGot")} {totalCorrect} {t("outOf")} {" "} {totalQuestions} {t("correctQuestions")}
         </p>
       </div>
 
@@ -122,13 +130,22 @@ export default function QuizResults() {
         </div>
       </div>
       <div className="text-center flex gap-4 justify-center items-center m-4 md:w-54 md:m-auto">
-        <Link
-          href="/"
-          className="w-full px-8 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors shadow-sm hover:shadow"
-        >
-          <p>{t("BackToHome")}</p>
-        </Link>
+        <BackToHomeButton className="md:w-54 md:m-auto"/>
       </div>
+    </div>
+  );
+}
+
+function BackToHomeButton({ className = "" }: { className?: string }) {
+  const t = useTranslations("quizResultsPage");
+  return (
+    <div className={`text-center flex gap-4 justify-center items-center m-4 ${className}`}>
+      <Link
+        href="/"
+        className="w-full px-8 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors shadow-sm hover:shadow"
+      >
+        <p>{t("BackToHome")}</p>
+      </Link>
     </div>
   );
 }

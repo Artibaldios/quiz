@@ -68,8 +68,15 @@ export async function POST(req: Request) {
         select: { totalRightAnswers: true, totalQuestions: true },
       });
 
-      const newTotalRight = (user?.totalRightAnswers || 0) + totalRightAnswersThisQuiz;
-      const newTotalQuestions = (user?.totalQuestions || 0) + totalQuestionsThisQuiz;
+      let newTotalRight;
+      let newTotalQuestions;
+      if(existingResult){
+        newTotalRight = (user?.totalRightAnswers || 0);
+        newTotalQuestions = (user?.totalQuestions || 0);
+      } else {
+        newTotalRight = (user?.totalRightAnswers || 0) + totalRightAnswersThisQuiz;
+        newTotalQuestions = (user?.totalQuestions || 0) + totalQuestionsThisQuiz;
+      }
       const accuracy = Math.round((newTotalRight / newTotalQuestions) * 100) || 0;
 
       await tx.user.update({

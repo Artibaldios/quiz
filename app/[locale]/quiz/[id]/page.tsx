@@ -18,7 +18,6 @@ async function fetchQuestions({ queryKey }: { queryKey: [string, string, number]
   if (!response.ok) {
     throw new Error('Failed to get quiz');
   }
-  
   return response.json();
 }
 
@@ -44,14 +43,14 @@ export default function QuizPage() {
   const quizId = params.id ? parseInt(params.id, 10) : NaN;
   const hasValidId = !isNaN(quizId);
 
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["questions", locale, quizId],
     queryFn: fetchQuestions,
     enabled: hasValidId,
   });
 
   const questions = data?.questions;
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -60,6 +59,12 @@ export default function QuizPage() {
   if (isLoading) return (
     <div className="min-h-[400px] flex items-center justify-center">
       <Loader variant="spinner" color="blue" size="xl" />
+    </div>
+  )
+
+  if (error) (
+    <div className="text-center">
+      <p className="text-lg text-gray-600">{t("notFound")}</p>
     </div>
   )
 
@@ -79,18 +84,16 @@ export default function QuizPage() {
   };
 
   const handleNext = async () => {
-    if (selectedAnswer === null) {
-      // toast.error("Please select an answer");
-      return;
-    }
+    if (!selectedAnswer) return;
 
-    const newAnswers = [...answers, selectedAnswer];
+    const newAnswers = [...answers];
+    newAnswers[currentQuestionIndex] = selectedAnswer;
     setAnswers(newAnswers);
 
     if (isLastQuestion) {
       setIsSubmitting(true);
       try {
-        // toast.success(`Quiz completed! You scored ${result.score}%`);
+
         const result = calculateQuizResult(questions, newAnswers);
         const answers = newAnswers.map((answer, index) => ({
           questionId: questions[index].id,
@@ -148,18 +151,18 @@ export default function QuizPage() {
         <div className="space-y-3 mb-8">
           {currentQuestion.options.map((option: string, index: number) => (
             <button
-              key={index}
+              key={`${currentQuestion.id}-option-${index}`}
               onClick={() => handleAnswerSelect(option)}
               className={`w-full p-4 text-left rounded-lg border-2 transition-all ${selectedAnswer === option
-                  ? "border-primary bg-blue-50 text-primary dark:bg-blue-900"
-                  : "border-gray-200 hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-blue-800"
+                ? "border-primary bg-blue-50 text-primary dark:bg-blue-900"
+                : "border-gray-200 hover:border-gray-300 hover:bg-gray-50 dark:hover:bg-blue-800"
                 }`}
             >
               <span className="font-medium mr-3 text-textColor">
                 {String.fromCharCode(65 + index)}.
               </span>
               <span className="text-textColor">{option}</span>
-              
+
             </button>
           ))}
         </div>

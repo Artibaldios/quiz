@@ -22,7 +22,8 @@
     "submitting": "Submitting...",
     "submitQuiz": "submit Quiz",
     "nextQuestion": "next question",
-    "notAvailbale": "No available questions"
+    "notAvailbale": "No available questions",
+    "notFound": "No Data found"
   },
   "quizResultsPage": {
     "quizResults": "Quiz Results",
@@ -64,7 +65,8 @@
     "lightTheme": "Light Theme",
     "darkTheme": "Dark Theme",
     "language": "Language",
-    "logout": "Logout"
+    "logout": "Logout",
+    "SignIn": "Sign In"
   },
   "LocaleSwitcher": {
     "locale": "Language: English"

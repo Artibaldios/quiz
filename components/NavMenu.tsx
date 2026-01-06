@@ -130,7 +130,6 @@ export const NavMenu = () => {
         <div className="md:hidden bg-white/80 dark:bg-zinc-900/80 shadow-2xl">
           <div className="px-4 pt-4 pb-6 space-y-4">
             {session ? (
-              <>
                 <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                   <Link 
                     href="/profile" 
@@ -153,17 +152,20 @@ export const NavMenu = () => {
                     <span>{t("logout")}</span>
                   </button>
                 </div>
-              </>
             ) : (
+            <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+              <ThemeSwitcher text={true}/>
+              <LocaleSwitcher />
               <button
                 onClick={() => {
                   signIn();
                   setMobileMenuOpen(false);
                 }}
-                className="w-full px-6 py-3 bg-linear-to-r from-blue-500 to-blue-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-200"
+                className="w-full mt-2 px-6 py-3 bg-linear-to-r from-blue-500 to-blue-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer"
               >
-                Sign In
+                {t("SignIn")}
               </button>
+            </div>
             )}
           </div>
         </div>

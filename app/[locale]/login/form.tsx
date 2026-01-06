@@ -121,14 +121,13 @@ const RegisterFormFields = ({ onSuccess, setError }: RegisterFormProps) => {
       setLoading(false);
 
       if (response.ok) {
-        const res = await signIn("credentials", {
+        const signInRes = await signIn("credentials", {
           redirect: false,
           username: form.username,
           password: form.password,
         });
-        if (res?.error) {
-          const data = await response.json();
-          setError(data.message || "Failed to create user");
+        if (signInRes?.error) {
+          setError("Account created but sign-in failed. Please login manually.");
         } else {
           onSuccess();
         }
@@ -211,6 +210,14 @@ export const LoginForm = () => {
   const { data: session, status } = useSession();
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState("");
+  const handleLoginToggle = useCallback(() => {
+    setError("");
+    setIsLogin(true);
+  }, []);
+  const handleRegisterToggle = useCallback(() => {
+    setError("");
+    setIsLogin(false);
+  }, []);
 
   useEffect(() => {
     if (status === "loading") return;
@@ -225,10 +232,7 @@ export const LoginForm = () => {
       <div className="flex items-center justify-center mb-8">
         <div className="bg-gray-100 dark:bg-blue-900 rounded-full p-1 flex">
           <button
-            onClick={() => {
-              setError("");
-              setIsLogin(true);
-            }}
+            onClick={handleLoginToggle}
             className={`px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300 cursor-pointer dark:text-textColor ${
               isLogin
                 ? "bg-blue-500 text-white shadow-lg transform scale-105"
@@ -238,10 +242,7 @@ export const LoginForm = () => {
             Login
           </button>
           <button
-            onClick={() => {
-              setError("");
-              setIsLogin(false);
-            }}
+            onClick={handleRegisterToggle}
             className={`px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300 cursor-pointer dark:text-textColor ${
               !isLogin
                 ? "bg-blue-500 text-white shadow-lg transform scale-105"

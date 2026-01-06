@@ -28,7 +28,6 @@ interface QuizResult {
 
 const fetchUserQuizStats = async (userId: string, locale: string): Promise<FetchedData> => {
   const res = await fetch(`/api/user/${userId}/quiz-stats?lang=${locale}`);
-  console.log(res)
   if (!res.ok) throw new Error("Failed to fetch stats");
   return res.json();
 };
@@ -36,11 +35,11 @@ const fetchUserQuizStats = async (userId: string, locale: string): Promise<Fetch
 const Profile = () => {
   const t = useTranslations("Profile");
   const { data: session, status } = useSession();
-  
+
   const userId = session?.user?.id;
   const locale = useLocale();
   const router = useRouter();
-    const { data: stats, isLoading, error } = useQuery({
+  const { data: stats, isLoading, error } = useQuery({
     queryKey: ["userStats", userId, locale],
     queryFn: () => fetchUserQuizStats(userId!, locale!),
     enabled: !!userId,
@@ -68,7 +67,7 @@ const Profile = () => {
       </div>
     );
   }
-console.log(stats)
+
   const accuracy = Math.round((stats.totalRightAnswers / stats.totalQuestions) * 100) || 0;
 
   return (
@@ -76,7 +75,7 @@ console.log(stats)
       {/* Background decorations */}
       <div className="fixed inset-0 pointer-events-none">
         {/* Grid pattern */}
-        <div 
+        <div
           className="absolute inset-0 opacity-[0.02]"
           style={{
             backgroundImage: 'linear-gradient(hsl(var(--border)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px)',
@@ -108,8 +107,8 @@ console.log(stats)
           {/* Progress Ring - Featured */}
           <div className="lg:col-span-1 glass-card p-8 flex flex-col items-center justify-center animate-fade-up">
             <div className="relative z-10">
-              <ProgressRing 
-                percentage={accuracy} 
+              <ProgressRing
+                percentage={accuracy}
                 size={220}
                 strokeWidth={14}
                 label={t("accuracy")}

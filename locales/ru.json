@@ -22,7 +22,8 @@
     "submitting": "Отправляем...",
     "submitQuiz": "отправить Квиз",
     "nextQuestion": "следующий вопрос",
-    "notAvailbale": "Нет доступных вопросов"
+    "notAvailbale": "Нет доступных вопросов",
+    "notFound": "не найдено"
   },
   "quizResultsPage": {
     "quizResults": "Результаты квиза",
@@ -63,7 +64,8 @@
     "lightTheme": "Светлая тема",
     "darkTheme": "Темная тема",
     "language": "Language",
-    "logout": "Выйти"
+    "logout": "Выйти",
+    "SignIn": "Войти"
   },
   "LocaleSwitcher": {
     "locale": "Язык: Русский"
