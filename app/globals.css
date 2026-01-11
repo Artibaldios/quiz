@@ -2,6 +2,7 @@
 
 @theme {
   --color-primary: #155DFC;
+  --color-secondary: 220 14% 96%;
   --color-bgColor: #f3f4f6;
   --color-textColor: #000;
   --color-bgContent: #fff;
@@ -9,8 +10,15 @@
   --color-shadowCardGeometric: 0 4px 30px -4px hsl(217 91% 60% / 0.12), 0 2px 10px -2px hsl(217 91% 60% / 0.08);
   --color-gradientGeometric: linear-gradient(135deg, hsl(217 91% 60%), hsl(199 89% 48%));
   --color-bgSuccess: #eb8386ab;
+  --color-bgGlass: 210 40% 98%;
+  --color-glassBorder: 210 40% 80%;
+  --glass-bg: 0 0% 100% / 0.25;
+  --glass-border: 0 0% 100% / 0.4;
+  --glass-blur: 20px;
 }
+
 @custom-variant dark (&:where(.dark, .dark *));
+
 @layer theme {
   .dark {
     --color-bgColor: #18181b;
@@ -18,38 +26,58 @@
     --color-bgContent: #292e3d;
   }
 }
+
 @layer base {
   body {
-    @apply bg-gray-100; /* light mode background */
-  }
-  .dark body {
-    @apply bg-zinc-900; /* dark mode background */
+    @apply bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 dark:from-slate-900 dark:via-blue-950/80 dark:to-slate-900;
   }
 }
 
 /* Animations */
 @layer utilities {
+  .glass {
+    @apply backdrop-blur-xl;
+    background: hsl(var(--glass-bg));
+    border: 1px solid hsl(var(--glass-border));
+  }
+
   .animate-float-slow {
     animation: float 6s ease-in-out infinite;
   }
-  
+
   .animate-float-delayed {
     animation: float 5s ease-in-out 1s infinite;
   }
-  
+
   .animate-float-soft {
     animation: float-soft 4s ease-in-out infinite;
   }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0) rotate(45deg); }
-  50% { transform: translateY(-12px) rotate(50deg); }
+
+  0%,
+  100% {
+    transform: translateY(0) rotate(45deg);
+  }
+
+  50% {
+    transform: translateY(-12px) rotate(50deg);
+  }
 }
 
 @keyframes float-soft {
-  0%, 100% { transform: translateY(0); opacity: 0.4; }
-  50% { transform: translateY(-8px); opacity: 0.6; }
+
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: translateY(-8px);
+    opacity: 0.6;
+  }
 }
 
 body {
@@ -59,13 +87,13 @@ body {
 }
 
 main {
-  margin-top: 73px; /* prevent content from being hidden behind fixed nav */
-/*  min-height: calc(100vh - 130px);  fill remaining vertical space */
+  margin-top: 66px;
+  min-height: calc(100vh - 130px);
   overflow: auto;
 }
-/* Global scrollbar customization */
+
 html::-webkit-scrollbar {
-  width: 12px; /* Horizontal: height */
+  width: 12px;
 }
 
 html::-webkit-scrollbar-track {
@@ -79,4 +107,9 @@ html::-webkit-scrollbar-thumb {
 
 html::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent;
+  background-image: linear-gradient(135deg, hsl(217 91% 60%), hsl(262 83% 58%));
 }

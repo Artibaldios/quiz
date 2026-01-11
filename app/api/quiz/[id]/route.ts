@@ -60,11 +60,19 @@ export async function GET(
       return NextResponse.json({ error: 'Quiz not found' }, { status: 404 });
     }
     // Map results to return language-specific title
-    const localizedtitle = isLocalizedText(quiz.title) ? quiz.title: { en: 'No title', ru: 'Нет темы' }
-    const localizedQuiz = {...quiz, title: localizedtitle[lang as Lang] || localizedtitle.en}
+    const localizedTitle = isLocalizedText(quiz.title) ? quiz.title: { en: 'No title', ru: 'Нет темы' }
+    const localizedCategory = isLocalizedText(quiz.category) ? quiz.category : { en: 'No category', ru: 'Нет категории' };
+
+    const localizedQuiz = {
+      ...quiz, 
+      title: localizedTitle[lang as Lang] || localizedTitle.en,
+      category: localizedCategory[lang as Lang] || localizedCategory.en,
+    }
     // Map questions to contain only requested language text/options
     const localizedQuestions = quiz.questions.map((q: DbQuizQuestion) => {
+
       const topic = isLocalizedText(q.topic) ? q.topic : { en: 'No topic', ru: 'Нет темы' };
+      
       const question_text = isLocalizedText(q.question_text) ? q.question_text : { en: 'No question text', ru: 'Нет текста вопроса' };
       const options = isOptionsArray(q.options) ? q.options.map(opt => opt[lang as Lang] || opt.en) : [];
       const correct_answer = isLocalizedText(q.correct_answer) ? q.correct_answer : { en: '', ru: '' };

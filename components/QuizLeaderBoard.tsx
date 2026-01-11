@@ -24,6 +24,7 @@ interface ApiResponse {
 
 const QuizLeaderboard: React.FC = () => {
   const [activeTab, setActiveTab] = React.useState<'completors' | 'successful'>('completors');
+  const [IsRefreshing, setIsRefreshing] = React.useState<boolean>(false);
   const t = useTranslations("homePage");
 
   const {
@@ -41,14 +42,18 @@ const QuizLeaderboard: React.FC = () => {
       return response.json();
     },
   });
-
+  const handleRefresh = () => {
+    refetch()
+    setIsRefreshing(true);
+    setTimeout(() => setIsRefreshing(false), 1000);
+  };
   const dataToShow = activeTab === 'completors'
     ? leadersData?.accuracyLeaders || []
     : leadersData?.rightAnswersLeaders || [];
 
   if (isLoading) {
     return (
-      <div className="w-full max-w-4xl mx-auto bg-bgContent dark:bg-zinc-900/80 rounded-2xl shadow-sm border border-white/30 overflow-hidden m-2">
+      <div className="w-full max-w-4xl mx-auto glass dark:bg-zinc-900/80 rounded-2xl shadow-sm border border-white/30 overflow-hidden m-2">
         <div className="p-8 flex flex-col items-center justify-center space-y-4">
           <div className="relative">
             <div className="w-12 h-12 border-3 border-white/30 rounded-full"></div>
@@ -61,7 +66,7 @@ const QuizLeaderboard: React.FC = () => {
 
   if (error) {
     return (
-      <div className="w-full max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-white/30 overflow-hidden p-8 m-2">
+      <div className="w-full max-w-4xl mx-auto glass rounded-2xl shadow-sm border border-white/30 overflow-hidden p-8 m-2">
         <div className="text-center space-y-4">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full">
             <Trophy className="w-8 h-8 text-red-500" />
@@ -83,7 +88,7 @@ const QuizLeaderboard: React.FC = () => {
   }
 
   return (
-    <div className="m-2 mx-auto bg-bgContent dark:bg-zinc-900/80 rounded-3xl shadow-sm border border-white/20 dark:border-zinc-700/50 overflow-hidden md:min-w-3/4">
+    <div className="m-2 mx-auto glass rounded-3xl shadow-sm border border-white/20 dark:border-zinc-700/50 overflow-hidden md:min-w-3/4">
       {/* Header with Gradient */}
       <div className="p-2 sm:px-6 sm:py-8 border-b border-gray-300 dark:border-white/30">
         <div className="flex items-center justify-between mb-6">
@@ -97,15 +102,15 @@ const QuizLeaderboard: React.FC = () => {
             </div>
           </div>
           <button
-            onClick={() => refetch()}
-            className="p-2.5 hover:bg-gray-100 active:bg-gray-200 rounded-xl transition-colors"
+            onClick={handleRefresh}
+            className={`p-2.5 rounded-xl glass border border-white/10 transition-all duration-300 ${IsRefreshing ? "animate-spin" : ""}`}
             aria-label="Refresh"
           >
             <RefreshCw className="w-5 h-5 text-gray-500" />
           </button>
         </div>
 
-        <div className="bg-gray-100 dark:bg-blue-900 rounded-2xl p-1 flex max-w-md ">
+        <div className="glass rounded-2xl p-1 flex max-w-md ">
           <button
             onClick={() => setActiveTab('completors')}
             className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center justify-center space-x-2 cursor-pointer ${activeTab === 'completors'
@@ -148,7 +153,7 @@ const QuizLeaderboard: React.FC = () => {
                 </div>
                 <div className="text-center">
                   <p className="font-semibold text-textColor truncate max-w-full">{dataToShow[1].name}</p>
-                  <p className="text-3xl font-bold text-blue-600 mt-1">
+                  <p className="text-3xl font-bold text-textColor/50 mt-1">
                     {activeTab === 'completors' ? `${dataToShow[1].accuracy}%` : `${dataToShow[1].totalRightAnswers}`}
                   </p>
                   <p className="text-xs text-textColor/50 mt-1">
@@ -173,7 +178,7 @@ const QuizLeaderboard: React.FC = () => {
                 </div>
                 <div className="text-center">
                   <p className="font-semibold text-textColor truncate max-w-full">{dataToShow[0].name}</p>
-                  <p className="text-3xl font-bold text-blue-600 mt-1">
+                  <p className="text-3xl font-bold text-textColor/50 mt-1">
                     {activeTab === 'completors' ? `${dataToShow[0].accuracy}%` : `${dataToShow[0].totalRightAnswers}`}
                   </p>
                   <p className="text-xs text-textColor/50 mt-1">
@@ -198,7 +203,7 @@ const QuizLeaderboard: React.FC = () => {
                 </div>
                 <div className="text-center">
                   <p className="font-semibold text-textColor truncate max-w-full">{dataToShow[2].name}</p>
-                  <p className="text-3xl font-bold text-blue-600 mt-1">
+                  <p className="text-3xl font-bold text-textColor/50 mt-1">
                     {activeTab === 'completors' ? `${dataToShow[2].accuracy}%` : `${dataToShow[2].totalRightAnswers}`}
                   </p>
                   <p className="text-xs text-textColor/50 mt-1">

@@ -8,7 +8,7 @@ import { Suspense } from 'react';
 const QuizLeaderboardContent = dynamic(() => import('./QuizLeaderBoard'), {
   ssr: false, // Disable SSR since it's scroll-triggered
   loading: () => (
-    <div className="w-full max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-white/30 overflow-hidden p-8">
+    <div className="w-full max-w-4xl mx-auto glass rounded-2xl shadow-sm border border-white/30 overflow-hidden p-8">
       <div className="flex flex-col items-center justify-center space-y-4">
         <div className="w-12 h-12 border-3 border-white/30 rounded-full animate-pulse"></div>
       </div>

@@ -51,7 +51,7 @@ const Profile = () => {
   }
   if (status === "loading" || isLoading) {
     return (
-      <div className="min-h-[400px] flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
       </div>
     );
@@ -71,7 +71,7 @@ const Profile = () => {
   const accuracy = Math.round((stats.totalRightAnswers / stats.totalQuestions) * 100) || 0;
 
   return (
-    <div className="min-h-screen bg-bgContent relative overflow-hidden rounded-2xl">
+    <div className="min-h-screen glass relative overflow-hidden rounded-b-2xl">
       {/* Background decorations */}
       <div className="fixed inset-0 pointer-events-none">
         {/* Grid pattern */}
@@ -84,7 +84,7 @@ const Profile = () => {
         />
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 py-8 lg:py-12 max-w-7xl">
+      <div className="relative z-10 container p-4 m-2 md:mx-auto max-w-7xl">
         {/* Header */}
         <header className="mb-12 animate-fade-up">
           <div className="flex items-center gap-4 mb-4">

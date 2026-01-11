@@ -36,22 +36,23 @@ export async function GET(req: NextRequest) {
     take: 10,
   });
 
-  // Map results to return language-specific title
-  const getLocalizedTitle = (title: JsonTitle, lang: Lang): string => {
-    if (!title || typeof title !== 'object') {
-      return 'No title';
+  // Reusable localized text extractor (works for title, category, etc.)
+  const getLocalizedText = (json: JsonTitle, lang: Lang): string => {
+    if (!json || typeof json !== 'object') {
+      return 'No text';
     }
-
-    const localized = title as LocalizedText; // Safe after null check
-    return lang === 'ru' ?
-      localized.ru ?? localized.en ?? 'No title' :
-      localized.en ?? 'No title';
+    
+    const localized = json as LocalizedText;
+    return lang === 'ru' ? 
+      localized.ru ?? localized.en ?? 'No text' : 
+      localized.en ?? 'No text';
   };
-  const mapTitle = (quiz: Quiz) => ({
+  const mapLocalizedQuiz = (quiz: Quiz, lang: Lang) => ({
     ...quiz,
-    title: getLocalizedTitle(quiz.title as JsonTitle, lang)
+    title: getLocalizedText(quiz.title as JsonTitle, lang),
+    category: getLocalizedText(quiz.category as JsonTitle, lang)
   });
 
-  const localizedQuizzes = results.map(mapTitle);
+  const localizedQuizzes = results.map(q => mapLocalizedQuiz(q, lang));
   return NextResponse.json(localizedQuizzes, { status: 201 });
 }

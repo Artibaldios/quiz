@@ -51,11 +51,11 @@ export default function QuizResults() {
       </div>
 
       {/* Topic Performance */}
-      <div className="bg-bgContent rounded-lg shadow-sm border p-6 mb-8 border-gray-200 min-w-full sm:min-w-2/3">
+      <div className="glass rounded-lg shadow-sm border p-6 mb-8 border-gray-200 min-w-full sm:min-w-2/3">
         <h3 className="text-xl font-semibold mb-6 text-textColor">{t("PerformanceByTopic")}</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {topicScores.map((topic) => (
-            <div key={topic.topic} className="border rounded-lg p-4 border-gray-200">
+            <div key={topic.topic} className="glass rounded-lg p-4">
               <div className="flex justify-between items-center mb-3">
                 <h4 className="font-semibold text-textColor">{topic.topic}</h4>
                 <span className="text-lg font-bold text-primary">{topic.percentage}%</span>
@@ -75,7 +75,7 @@ export default function QuizResults() {
       </div>
 
       {/* Detailed Results */}
-      <div className="bg-bgContent rounded-lg shadow-sm border p-6 mb-8 border-gray-200 md:min-w-2/3">
+      <div className="glass rounded-lg shadow-sm border p-6 mb-8 border-gray-200 md:min-w-2/3">
         <h3 className="text-xl font-semibold mb-6 text-textColor">{t("questionReview")}</h3>
         <div className="space-y-4">
           {quizResult.questionsWithAnswers && quizResult.questionsWithAnswers.map((qa, index) => (

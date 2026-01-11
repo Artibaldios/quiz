@@ -56,8 +56,8 @@ const QuizHistoryTable = ({ quizzes }: QuizHistoryTableProps) => {
 
   return (
     <div className="
-      bg-bgColor dark:bg-zinc-900/80 backdrop-blur-xl
-      rounded-3xl p-6 md:p-8
+      glass dark:bg-zinc-900/80 backdrop-blur-xl
+      rounded-2xl p-6 md:p-8
     ">
       <div className="mb-6">
         <h3 className="text-2xl font-semibold font-display text-textColor tracking-tight">
@@ -78,9 +78,8 @@ const QuizHistoryTable = ({ quizzes }: QuizHistoryTableProps) => {
               key={quiz.id}
               className="
                 flex items-center p-5
-                bg-white/50 dark:bg-bgContent backdrop-blur-sm
+                bg-white/50 dark:bg-bgContent/60 backdrop-blur-sm
                 rounded-2xl border border-transparent
-                hover:bg-white/80 dark:hover:bg-bgContent/60
                 hover:shadow-xl hover:shadow-black/10 dark:hover:shadow-black/20
                 transition-all duration-200 ease-out
                 group

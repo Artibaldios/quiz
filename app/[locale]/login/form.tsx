@@ -227,7 +227,7 @@ export const LoginForm = () => {
   }, [session, status, router]);
 
   return (
-    <div className="bg-bgContent rounded-2xl shadow-2xl p-8 w-full max-w-md">
+    <div className="bg-bgContent rounded-2xl shadow-xl p-8 w-full max-w-md">
       {/* Toggle Switch */}
       <div className="flex items-center justify-center mb-8">
         <div className="bg-gray-100 dark:bg-blue-900 rounded-full p-1 flex">

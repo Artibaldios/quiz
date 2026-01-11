@@ -7,8 +7,8 @@ export default function Home() {
   const t = useTranslations("homePage");
 
   return (
-    <div className="h-full flex flex-col bg-dark-100 dark:bg-bgContent rounded-md mx-2">
-      <div className="relative bg-card rounded-3xl shadow-cardGeometric p-10 overflow-hidden group">
+    <div className="h-full flex flex-col rounded-md mx-2">
+      <div className="relative rounded-3xl shadow-cardGeometric p-10 overflow-hidden group">
         {/* Geometric Grid Pattern */}
         <div className="absolute inset-0 opacity-[0.04]">
           <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
@@ -27,7 +27,7 @@ export default function Home() {
         <div className="absolute bottom-4 right-8 md:right-16 w-6 h-6 bg-primary/30 rounded-full animate-float-soft" />
         <div className="absolute top-1/4 left-8 md:left-16 w-6 h-6 bg-primary/30 rounded-full animate-float-soft" />
         <div className="relative z-10">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl leading-10 md:leading-18 font-bold text-center mb-4 bg-primary bg-clip-text text-transparent tracking-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl leading-10 md:leading-18 font-bold text-center mb-4 gradient-text bg-clip-text text-transparent tracking-tight">
             {t("title")}
           </h1>
           <p className="text-center text-muted-foreground mb-0 text-lg max-w-md mx-auto dark:text-textColor">

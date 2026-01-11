@@ -25,6 +25,7 @@ export interface QuizResult {
 export interface QuizCardProps {
   id: number;
   title: string;
+  category: string;
   level?: 'easy' | 'medium' | 'hard';
   questionCount: number;
   plays: number;
@@ -141,7 +142,7 @@ const levelConfigs: Record<string, Record<LevelKey | 'default', LevelConfig>> = 
   },
   en: {
     easy: { color: 'bg-emerald-400/20', border: 'border-emerald-400/30', text: 'text-emerald-400', icon: '⭐', level: 'easy' },
-    medium: { color: 'bg-amber-400/20', border: 'border-amber-400/30', text: 'text-amber-400', icon: '🔥', level: 'medium' },
+    medium: { color: 'bg-amber-400/20', border: 'border-amber-400/30', text: 'text-orange-400', icon: '🔥', level: 'medium' },
     hard: { color: 'bg-rose-400/20', border: 'border-rose-400/30', text: 'text-rose-400', icon: '💀', level: 'hard' },
     default: { color: 'bg-zinc-400/20', border: 'border-zinc-400/30', text: 'text-zinc-400', icon: '❓', level: 'medium' },
   },

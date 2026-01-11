@@ -34,7 +34,7 @@ const RecentQuizCard = ({ quiz, index }: RecentQuizCardProps) => {
   return (
     <div 
       className={`         
-        relative bg-gray-100 dark:bg-zinc-900/80 backdrop-blur-xl
+        relative glass backdrop-blur-xl
         border border-white/20 dark:border-zinc-700/50
         rounded-3xl p-4 md:p-6
         shadow-lg dark:shadow-2xl

@@ -3,65 +3,67 @@ import React from 'react';
 export const QuizCardSkeleton: React.FC = () => {
   return (
     <div className="
-      relative
-      bg-gray-100 dark:bg-zinc-900/80 backdrop-blur-xl
-      border border-white/20 dark:border-zinc-700/50
-      rounded-3xl p-4 md:p-6
-      shadow-lg dark:shadow-2xl
-      transition-all duration-300 ease-out
-      overflow-hidden
-      w-full max-w-md
+      group relative
       animate-pulse
+      w-full max-w-md
     ">
-      {/* Subtle iOS-style background vibrancy */}
-      <div className="absolute inset-0 bg-linear-to-br from-white/50 dark:from-zinc-800/30 to-transparent rounded-[inherit] -z-10" />
-      
-      {/* Content Container - matches space-y-4 from QuizCard */}
-      <div className="relative space-y-4">
-        {/* Header - Title + Level on same baseline */}
-        <div className="flex items-baseline justify-between gap-3 pt-2">
-          <div className="w-50 bg-zinc-300 dark:bg-zinc-700 rounded-md h-7 line-clamp-1"></div>
-        </div>
-
-        {/* Stats Grid - 3 equal columns matching QuizCard */}
-        <div className="flex justify-between gap-2 md:gap-4">
-          {/* Level Stat */}
-          <div className="w-1/3 flex flex-col items-center gap-2 p-3 rounded-2xl bg-white/80 dark:bg-zinc-800/50 backdrop-blur-sm border border-white/30 dark:border-zinc-700/50">
-            <div className="flex items-center justify-center rounded-2xl bg-zinc-300 dark:bg-zinc-600 shrink-0 w-14 h-14"></div>
-            <div className="min-w-0 flex justify-center items-center gap-1">
-              <div className="w-12 h-3.5 bg-zinc-400 dark:bg-zinc-500 rounded"></div>
-            </div>
-          </div>
-
-          {/* Questions Stat */}
-          <div className="w-1/3 flex flex-col items-center gap-2 p-3 rounded-2xl bg-white/80 dark:bg-zinc-800/50 backdrop-blur-sm border border-white/30 dark:border-zinc-700/50">
-            <div className="p-2 bg-zinc-200/50 dark:bg-zinc-700/50 rounded-xl">
-              <div className="w-10 h-10 bg-zinc-400 dark:bg-zinc-600 rounded-lg"></div>
-            </div>
-            <div className="min-w-0 flex flex-col items-center gap-1">
-              <div className="w-16 h-3.5 bg-zinc-400 dark:bg-zinc-600 rounded"></div>
-            </div>
-          </div>
-
-          {/* Plays Stat */}
-          <div className="w-1/3 flex flex-col items-center gap-2 p-3 rounded-2xl bg-white/80 dark:bg-zinc-800/50 backdrop-blur-sm border border-white/30 dark:border-zinc-700/50">
-            <div className="p-2 bg-zinc-200/50 dark:bg-zinc-700/50 rounded-xl">
-              <div className="w-10 h-10 bg-zinc-400 dark:bg-zinc-600 rounded-lg"></div>
-            </div>
-            <div className="min-w-0 flex flex-col items-center gap-1">
-              <div className="w-14 h-3.5 bg-zinc-400 dark:bg-zinc-600 rounded"></div>
-            </div>
-          </div>
-        </div>
-
-        {/* Date and Button - exact match */}
-        <div className='flex justify-between items-center'>
-          <div className="w-20 h-4 bg-zinc-400 dark:bg-zinc-600 rounded"></div>
+      <div className="
+        relative glass rounded-2xl p-6 border border-white/20
+        bg-gradient-to-br from-blue-500/80 via-purple-500/60 to-blue-600/40
+        dark:from-zinc-800/80 dark:via-zinc-700/60 dark:to-zinc-800/40
+        backdrop-blur-xl
+        transform transition-all duration-500 ease-out
+        hover:border-white/40 hover:shadow-md
+        space-y-4
+      ">
+        {/* Title */}
+        <div className="h-7 bg-gradient-to-r from-blue-500/70 to-purple-500/70 dark:from-zinc-600/70 dark:to-zinc-500/70 rounded-md w-3/4"></div>
+        
+        {/* Icons row */}
+        <div className="flex items-center gap-3">
+          {/* Music icon */}
           <div className="
-            w-24 h-10 
-            bg-primary/70 hover:bg-blue-500/70
-            rounded-2xl
-            shadow-lg hover:shadow-xl
+            w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500/80 to-purple-500/80
+            dark:from-zinc-600/60 dark:to-zinc-500/60
+            shadow-lg
+          "></div>
+          {/* HelpCircle icon */}
+          <div className="
+            w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500/50 via-purple-500/40 to-blue-600/30
+            dark:from-zinc-700/50 dark:via-zinc-600/40 dark:to-zinc-700/30
+            backdrop-blur border border-white/10
+          "></div>
+          {/* Users icon */}
+          <div className="
+            w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500/50 via-purple-500/40 to-blue-600/30
+            dark:from-zinc-700/50 dark:via-zinc-600/40 dark:to-zinc-700/30
+            backdrop-blur border border-white/10
+          "></div>
+        </div>
+        
+        {/* Stats row */}
+        <div className="flex items-center gap-4 text-sm">
+          {/* Level badge */}
+          <div className="
+            rounded-md bg-gradient-to-r from-blue-500/70 to-purple-500/70
+            dark:from-zinc-600/70 dark:to-zinc-500/70
+            w-20 h-5
+          "></div>
+          {/* Questions */}
+          <div className="flex items-center gap-1 w-24 h-5 bg-gradient-to-r from-blue-500/70 to-purple-500/70 dark:from-zinc-600/70 dark:to-zinc-500/70 rounded"></div>
+          {/* Plays */}
+          <div className="flex items-center gap-1 w-28 h-5 bg-gradient-to-r from-blue-500/70 to-purple-500/70 dark:from-zinc-600/70 dark:to-zinc-500/70 rounded"></div>
+        </div>
+        
+        {/* Date and Button */}
+        <div className="flex items-center justify-between">
+          <div className="w-20 h-4 bg-gradient-to-r from-blue-500/80 to-purple-500/80 dark:from-zinc-600/70 dark:to-zinc-500/70 rounded"></div>
+          <div className="
+            px-4 py-2 rounded-xl font-semibold text-sm
+            bg-gradient-to-r from-blue-500/80 to-purple-500/80
+            dark:from-blue-600/60 dark:to-purple-600/60
+            shadow-md 
+            w-20 h-8
           "></div>
         </div>
       </div>

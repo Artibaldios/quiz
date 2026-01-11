@@ -64,6 +64,7 @@ model VerificationToken {
 model Quiz {
   id            Int        @id @default(autoincrement())
   level         String?
+  category      Json?
   plays         Int        @default(0)
   questionCount Int        @default(0)
   createdAt     DateTime   @default(now())

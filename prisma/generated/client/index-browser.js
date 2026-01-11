@@ -168,6 +168,7 @@ exports.Prisma.VerificationTokenScalarFieldEnum = {
 exports.Prisma.QuizScalarFieldEnum = {
   id: 'id',
   level: 'level',
+  category: 'category',
   plays: 'plays',
   questionCount: 'questionCount',
   createdAt: 'createdAt',
@@ -202,6 +203,11 @@ exports.Prisma.UserAnswerScalarFieldEnum = {
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.JsonNullValueInput = {

@@ -48,8 +48,7 @@ const ProgressRing = ({ percentage, size = 200, strokeWidth = 12, label = "Accur
     }, [percentage]);
 
     return (
-        <div className={`relative bg-gray-100 dark:bg-zinc-900/80 backdrop-blur-xl
-        border border-white/20 dark:border-zinc-700/50
+        <div className={`relative glass backdrop-blur-xl
         rounded-3xl p-4 md:p-6
         shadow-lg dark:shadow-2xl
         transition-all duration-300 ease-out

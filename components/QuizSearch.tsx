@@ -4,24 +4,17 @@ import { useLocale, useTranslations } from "next-intl";
 import { useState, useEffect, useRef, ChangeEvent } from "react";
 import QuizCard from "./QuizCard";
 import { QuizCardSkeleton } from "./QuizCardSkeleton";
+import { type QuizCardProps } from '@/utils/helpers';
 import Loader from '@/components/Loader'
 
-interface QuizData {
-  id: number;
-  title: string;
-  level?: "easy" | "medium" | "hard";
-  questionCount: number;
-  plays: number;
-  createdAt: string;
-}
 const SEARCH_DEBOUNCE_DELAY = 500;
 
 export default function SearchInput() {
   const locale = useLocale();
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<QuizData[]>([]);
-  const [cardsLatest, setCardsLatest] = useState<QuizData[]>([]);
-  const [cardsPopular, setCardsPopular] = useState<QuizData[]>([]);
+  const [results, setResults] = useState<QuizCardProps[]>([]);
+  const [cardsLatest, setCardsLatest] = useState<QuizCardProps[]>([]);
+  const [cardsPopular, setCardsPopular] = useState<QuizCardProps[]>([]);
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const t = useTranslations("homePage");
@@ -100,7 +93,7 @@ export default function SearchInput() {
 
   if (initialLoading) {
     return (
-      <div className="flex flex-col bg-bgContent p-4 md:p-6 min-h-[400px] rounded-md space-y-6">
+      <div className="flex flex-col p-4 md:p-6 min-h-[400px] rounded-md space-y-6">
         <div className="relative flex justify-center gap-2 mb-6 items-center">
           <div className="relative flex-1 max-w-2xl">
             <svg
@@ -124,7 +117,7 @@ export default function SearchInput() {
               onChange={handleChange}
               placeholder={t("placeholderText")}
               aria-label={t("placeholderText")}
-              className="w-full px-10 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-lg placeholder:text-textColor text-textColor"
+              className="w-full glass px-10 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-lg placeholder:text-textColor text-textColor"
               lang={locale}
             />
           </div>
@@ -149,7 +142,7 @@ export default function SearchInput() {
   }
 
   return (
-    <div className="flex flex-col bg-bgContent p-4 md:p-6 min-h-[400px] rounded-md">
+    <div className="flex flex-col p-4 md:p-6 min-h-[400px] rounded-md">
       <div className="relative flex justify-center gap-2 mb-6 items-center">
         <div className="relative flex-1 max-w-2xl">
           <svg
@@ -173,7 +166,7 @@ export default function SearchInput() {
             onChange={handleChange}
             placeholder={t("placeholderText")}
             aria-label={t("placeholderText")}
-            className="w-full px-10 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-lg placeholder:text-textColor text-textColor"
+            className="w-full px-10 py-3 glass border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-lg placeholder:text-textColor text-textColor"
             lang={locale}
           />
         </div>
@@ -215,7 +208,7 @@ export default function SearchInput() {
 
 interface QuizCarouselProps {
   title: string;
-  quizzes: QuizData[];
+  quizzes: QuizCardProps[];
   carouselRef: React.RefObject<HTMLDivElement | null>;
   scrollCarousel: (direction: "left" | "right", ref: React.RefObject<HTMLDivElement | null>) => void;
   initialLoading: boolean;
@@ -235,7 +228,7 @@ function QuizCarousel({ title, quizzes, carouselRef, scrollCarousel, initialLoad
       <div className="relative">
         <div
           ref={carouselRef}
-          className="flex overflow-x-auto gap-6 pb-6 scrollbar-hide scroll-smooth"
+          className="flex overflow-x-auto gap-6 p-2 md:py-6 scrollbar-hide scroll-smooth"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {initialLoading ? (
@@ -269,7 +262,7 @@ function ScrollButton({ direction, onClick }: ScrollButtonProps) {
   return (
     <button
       onClick={onClick}
-      className="group relative w-11 h-11 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border border-white/50 dark:border-zinc-700/50 rounded-2xl shadow-lg hover:shadow-xl dark:hover:shadow-[0_8px_25px_rgba(0,0,0,0.3)] active:shadow-md active:scale-95 transition-all duration-200 ease-out flex items-center justify-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-zinc-900"
+      className="group relative w-11 h-11 glass backdrop-blur-xl border border-white/50 dark:border-zinc-700/50 rounded-2xl shadow-lg hover:shadow-xl dark:hover:shadow-[0_8px_25px_rgba(0,0,0,0.3)] active:shadow-md active:scale-95 transition-all duration-200 ease-out flex items-center justify-center cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-zinc-900"
       aria-label={`Scroll ${direction}`}
       type="button"
     >

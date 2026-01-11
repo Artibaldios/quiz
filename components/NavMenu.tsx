@@ -59,7 +59,7 @@ export const NavMenu = () => {
 
                 {/* Profile Dropdown */}
                 {profileMenuOpen && (
-                  <div className="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-zinc-900 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl shadow-2xl py-2 animate-in slide-in-from-top-2 duration-200">
+                  <div className="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-zinc-800 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl shadow-2xl py-2 animate-in slide-in-from-top-2 duration-200">
                     <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
                       <p className="text-md font-bold text-gray-900 dark:text-white">
                         {session.user?.name || session.user?.email}
@@ -81,7 +81,7 @@ export const NavMenu = () => {
                       
                       <ThemeSwitcher text={true}/>
                       
-                      <LocaleSwitcher />
+                      <LocaleSwitcher text={true}/>
                       
                       <button
                         onClick={() => {
@@ -98,8 +98,9 @@ export const NavMenu = () => {
                 )}
               </div>
             ) : (
-              <div className="flex gap-4 justify-center items-center">
+              <div className="flex gap-2 justify-center items-center">
                 <ThemeSwitcher text={false}/>
+                <LocaleSwitcher text={false}/>
                 <button
                   onClick={() => signIn()}
                   className="px-5 py-2.5 bg-linear-to-r from-blue-500 to-blue-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer"
@@ -140,7 +141,7 @@ export const NavMenu = () => {
                     <span>{t("profile")}</span>
                   </Link>
                   <ThemeSwitcher text={true}/>
-                  <LocaleSwitcher />
+                  <LocaleSwitcher text={true}/>
                   <button
                     onClick={() => {
                       signOut();
@@ -155,7 +156,7 @@ export const NavMenu = () => {
             ) : (
             <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
               <ThemeSwitcher text={true}/>
-              <LocaleSwitcher />
+              <LocaleSwitcher text={true}/>
               <button
                 onClick={() => {
                   signIn();

@@ -14,7 +14,7 @@ export default async function LocaleLayout({
   return (
     <Provider params={{ locale }}>
       <NavMenu />
-      <main className="flex flex-col max-w-7xl m-auto mb-4 bg-bgColor">
+      <main className="flex flex-col max-w-7xl m-auto mb-4">
         {children}
       </main>
       <Footer />
