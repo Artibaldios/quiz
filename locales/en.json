@@ -44,7 +44,7 @@
     "BackToHome": "Back to Home",
     "notFound": "Something went wrong"
   },
-  "Profile":{
+  "Profile": {
     "refresh": "Refresh",
     "noData": "Something went wrong",
     "welcome": "welcome",
@@ -54,12 +54,11 @@
     "quizzesTaken": "Quizzes Taken",
     "perfectScores": "Perfect Scores",
     "correctAnswers": "Correct Answers",
-    "totalQuestions":"Total Questions",
+    "totalQuestions": "Total Questions",
     "recentActivity": "Recent Activity",
     "completeHistory": "Complete History",
     "quizHistory": "Quiz History",
     "total": "total quizzes completed"
-
   },
   "quizCard": {
     "questions": "Questions",

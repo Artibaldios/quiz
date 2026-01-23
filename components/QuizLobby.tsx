@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState } from "react";
-import { useSearchParams, useParams, useRouter } from "next/navigation"; 
+import { useSearchParams, useParams, useRouter } from "next/navigation";
 import { LobbySettings, User } from "@/types/quiz";
 import LobbyHeader from "@/components/Lobbyheader";
 import QuizInfo from "@/components/LobbyQuizInfo";
@@ -28,13 +28,13 @@ const QuizLobby = () => {
 
   const { data: session } = useSession();
 
-  const { users, isConnected, joinLobby, socket, hostId } = useLobbySocket({lobbyCode, quizId, locale, router} );
+  const { users, isConnected, joinLobby, socket, hostId } = useLobbySocket({ lobbyCode, quizId, locale, router });
   const isHost = session?.user.id === hostId;
 
   const handleQuizStart = () => {
     console.log('Starting quiz with settings:', settings);
-    socket?.emit('start-quiz', { 
-      lobbyCode, 
+    socket?.emit('start-quiz', {
+      lobbyCode,
       settings
     });
   }
@@ -68,15 +68,15 @@ const QuizLobby = () => {
           <div className="space-y-6">
             <JoinedUsers users={users} /> {/* Dynamic host */}
           </div>
-            {isConnected && hasJoined && users.length > 0 && isHost && (
-              <button
-                onClick={handleQuizStart}
-                className="bg-green-500 hover:bg-green-600 px-8 py-3 rounded-lg text-white font-bold text-lg mt-6"
-                disabled={!socket?.connected}
-              >
-                🚀 Start Quiz ({users.length} players)
-              </button>
-            )}
+          {isConnected && hasJoined && users.length > 0 && isHost && (
+            <button
+              onClick={handleQuizStart}
+              className="bg-green-500 hover:bg-green-600 px-8 py-3 rounded-lg text-white font-bold text-lg mt-6"
+              disabled={!socket?.connected}
+            >
+              🚀 Start Quiz ({users.length} players)
+            </button>
+          )}
         </div>
       </div>
     </div>

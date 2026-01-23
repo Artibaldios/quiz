@@ -1,6 +1,8 @@
 "use client"
 import QuizLeaderboard from '@/components/QuizLeaderBoard';
 import QuizSearch from '@/components/QuizSearch';
+import LobbyInput from '@/components/Lobbyinput';
+
 import { useTranslations } from 'next-intl';
 
 export default function Home() {
@@ -8,7 +10,7 @@ export default function Home() {
 
   return (
     <div className="h-full flex flex-col rounded-md mx-2">
-      <div className="relative rounded-3xl shadow-cardGeometric p-10 overflow-hidden group">
+      <div className="relative rounded-3xl p-10 overflow-hidden group">
         {/* Geometric Grid Pattern */}
         <div className="absolute inset-0 opacity-[0.04]">
           <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
@@ -37,6 +39,7 @@ export default function Home() {
       </div>
       <QuizSearch />
       <QuizLeaderboard />
+      <LobbyInput />
     </div>
   );
 }

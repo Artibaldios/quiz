@@ -55,7 +55,7 @@ export function useQuizLogic({
   const updateAnswer = useCallback((questionIndex: number, answer: string) => {
     const now = Date.now();
     const timeElapsedMs = lobbySettings.questionTimer * 1000 - (timer || 0) * 1000;
-    
+
     setAnswers(prev => ({ ...prev, [questionIndex]: answer }));
     setSelectedAnswer(answer);
 
@@ -139,9 +139,9 @@ export function useQuizLogic({
 
   const resetTimer = useCallback(() => {
     if (socket?.connected && lobbyCode) {
-      socket.emit('start-question-timer', { 
-        lobbyCode, 
-        duration: lobbySettings.questionTimer 
+      socket.emit('start-question-timer', {
+        lobbyCode,
+        duration: lobbySettings.questionTimer
       });
     }
   }, [lobbySettings.questionTimer, socket, lobbyCode]);

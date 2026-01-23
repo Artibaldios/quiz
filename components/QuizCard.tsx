@@ -1,4 +1,3 @@
-import { Link } from '@/i18n/navigation';
 import React from 'react';
 import { formatRelativeDate, getLevelConfig, type LevelConfig, type QuizCardProps } from '@/utils/helpers';
 import { useLocale, useTranslations } from 'next-intl';

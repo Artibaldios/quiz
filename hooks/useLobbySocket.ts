@@ -9,7 +9,7 @@ let globalSocket: Socket | null = null;
 
 const initGlobalSocket = () => {
   if (!globalSocket) {
-    globalSocket = io(process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3000', {
+    globalSocket = io(process.env.NEXT_PUBLIC_URL || 'http://localhost:3000', {
       path: '/api/socket',
       autoConnect: true,
       reconnection: true,

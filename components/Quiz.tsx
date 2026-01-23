@@ -82,14 +82,14 @@ export default function QuizPage() {
   const lobbyCode = params.code as string;
   const locale = params.locale as string;
   const router = useRouter();
- 
+
   const {
     socket,
     hostId,
-    users: lobbyUsers,        
-    lobbyUserCount: lobbyTotalUsers,  
+    users: lobbyUsers,
+    lobbyUserCount: lobbyTotalUsers,
     isConnected,
-    joinLobby                
+    joinLobby
   } = useLobbySocket({
     lobbyCode,
     quizId,
@@ -103,9 +103,9 @@ export default function QuizPage() {
   const searchHostId = searchParams.get('hostId');
   const { data: session, status } = useSession();
   const isHost = session?.user.id === hostId || session?.user.id === searchHostId;
- 
+
   const questions = data?.questions;
- 
+
   // ✅ STATES
   const [timer, setTimer] = useState<number>(lobbySettings.questionTimer);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -184,7 +184,7 @@ export default function QuizPage() {
   const handleContinue = useCallback(() => {
     if (socket?.connected && isHost) {
       const isLastQuestion = quizLogic.currentQuestionIndex === (questions?.length || 0) - 1;
-     
+
       if (isLastQuestion) {
         console.log('🏁 Host → finishing quiz');
         socket.emit('finish-quiz', { lobbyCode });
@@ -222,7 +222,7 @@ export default function QuizPage() {
         newMap.set(userId, username);
         return newMap;
       });
-     
+
       // ✅ Calculate isCorrect even for empty answers
       const isCorrect = answer === '' ? false : answer === quizLogic.currentQuestion?.correct_answer;
       const userResult: UserResult = {
@@ -232,7 +232,7 @@ export default function QuizPage() {
         isCorrect,
         score: score || 0 // Server sends 0 for unanswered
       };
-     
+
       // Rest of your existing logic...
       setCurrentQuestionResults(prev => {
         const existingIndex = prev.findIndex(r => r.userId === userId);
@@ -243,12 +243,12 @@ export default function QuizPage() {
         }
         return [...prev, userResult];
       });
-     
+
       // 👇 ACCUMULATE ALL QUESTIONS' RESULTS (PERSISTENT)
       setAllQuizResults(prev => {
         const newResults = { ...prev };
         if (!newResults[questionIndex]) newResults[questionIndex] = [];
-       
+
         const existingIndex = newResults[questionIndex].findIndex(r => r.userId === userId);
         if (existingIndex >= 0) {
           const updated = [...newResults[questionIndex]];
@@ -260,7 +260,7 @@ export default function QuizPage() {
         console.log("newResults", newResults)
         return newResults;
       });
-     
+
       if (allAnswered) {
         setShowCurrentResults(true);
       }
@@ -313,16 +313,16 @@ export default function QuizPage() {
 
     const handleQuestionAdvanced = ({ currentQuestionIndex }: { currentQuestionIndex: number }) => {
       console.log('📱 ALL clients → question', currentQuestionIndex);
-     
+
       // Server drives question progression
       quizLogic.goToQuestion(currentQuestionIndex);
-     
+
       // Reset ONLY current question UI state
       setShowCurrentResults(false);
       setCurrentQuestionResults([]);
       setCurrentAnsweredUsersMap(new Map());
       setTimer(lobbySettings.questionTimer);
-     
+
       // ✅ allQuizResults persists automatically!
     };
 
@@ -413,7 +413,7 @@ function QuizUI({
   return (
     <div className="flex flex-col justify-center items-center max-w-full m-2">
       {showCurrentResults || quizFinished ? null : (
-        <Timer 
+        <Timer
           t={t}
           timer={timer}
           isTimerRunning={isTimerRunning}
@@ -442,7 +442,7 @@ function QuizUI({
         pauseTimer={pauseTimer}
         resumeTimer={resumeTimer}
       />
-     
+
       {quizFinished ? (
         // ✅ FINAL RESULTS SCREEN
         <FinalResults
@@ -496,13 +496,12 @@ function Timer({ timer, isTimerRunning, t, isHost, pauseTimer, resumeTimer, tota
       {/* Timer Progress Bar */}
       <div className={`w-64 h-6 bg-white rounded-full shadow-lg border-4 border-gray-100 overflow-hidden ${timer < 4 ? 'animate-pulse' : ''}`}>
         <div
-          className={`h-full rounded-full transition-all duration-100 ease-linear shadow-md ${
-            timer < 4
+          className={`h-full rounded-full transition-all duration-100 ease-linear shadow-md ${timer < 4
               ? 'bg-red-400 border-r-4 border-red-500'
               : timer < 7
-              ? 'bg-yellow-400 border-r-4 border-yellow-500'
-              : 'bg-primary border-r-4 border-blue-800'
-          }`}
+                ? 'bg-yellow-400 border-r-4 border-yellow-500'
+                : 'bg-primary border-r-4 border-blue-800'
+            }`}
           style={{ width: `${percentage}%` }}
         />
       </div>
@@ -540,7 +539,7 @@ interface FinalResultsProps {
 
 function FinalResults({ totalScores, lobbyUsers, t, quizLogic }: FinalResultsProps) {
   const router = useRouter();
- 
+
   return (
     <div className="glass rounded-2xl shadow-xl p-3 sm:p-6 lg:p-10 border max-w-4xl mx-auto w-full">
       {/* Final Leaderboard */}
@@ -728,11 +727,10 @@ function QuizContent({
             key={`${currentQuestion.id}-option-${index}`}
             onClick={() => updateAnswer(currentQuestionIndex, option)}
             disabled={quizLogic.isSubmitting || selectedAnswer !== null}
-            className={`group w-full p-6 text-left rounded-xl border-2 transition-all duration-300 shadow-md ${
-              selectedAnswer === option
+            className={`group w-full p-6 text-left rounded-xl border-2 transition-all duration-300 shadow-md ${selectedAnswer === option
                 ? "border-primary bg-gradient-to-r from-blue-50 to-indigo-50 text-primary shadow-primary-lg"
                 : "border-gray-200 hover:border-primary/50 hover:bg-gradient-to-r hover:from-gray-50 hover:to-blue-50"
-            } disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-md disabled:hover:translate-y-0`}
+              } disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-md disabled:hover:translate-y-0`}
           >
             <span className="font-bold text-xl mr-4 text-primary group-hover:text-primary-dark">
               {String.fromCharCode(65 + index)}.
@@ -741,7 +739,7 @@ function QuizContent({
           </button>
         ))}
       </div>
-     
+
       {/* Current answered users avatars */}
       {currentAnsweredUsersArr && currentAnsweredUsersArr.length > 0 && (
         <div className="flex flex-wrap gap-3 p-6 glass rounded-xl">
@@ -804,20 +802,18 @@ function QuizResults({
               <tr key={userId} className="hover:bg-gray-50 transition-colors">
                 <td className="px-2 py-4 whitespace-nowrap md:px-6">
                   <div className="flex items-center gap-3">
-                    <div className={`w-3 h-3 rounded-full shadow-sm ${
-                      isCorrect ? 'bg-blue-500' : 'bg-red-500'
-                    }`} />
+                    <div className={`w-3 h-3 rounded-full shadow-sm ${isCorrect ? 'bg-blue-500' : 'bg-red-500'
+                      }`} />
                     <span className="font-semibold text-gray-900 max-w-[200px] truncate">
                       {username}
                     </span>
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right">
-                  <span className={`font-bold text-lg ${
-                    isCorrect
+                  <span className={`font-bold text-lg ${isCorrect
                       ? 'text-blue-600 bg-gray-100 px-3 py-1 rounded-full'
                       : 'text-gray-500'
-                  }`}>
+                    }`}>
                     {isCorrect ? `${score} pts` : `0 pts`}
                   </span>
                 </td>

@@ -44,7 +44,7 @@
     "BackToHome": "Вернуться домой",
     "notFound": "Что-то пошло не так"
   },
-  "Profile":{
+  "Profile": {
     "refresh": "Refresh",
     "noData": "Something went wrong",
     "welcome": "welcome",
@@ -54,7 +54,7 @@
     "quizzesTaken": "Пройденные квизы",
     "perfectScores": "Идеальные результаты",
     "correctAnswers": "Правильные ответы",
-    "totalQuestions":"Всего вопросов",
+    "totalQuestions": "Всего вопросов",
     "recentActivity": "Недавняя Активность",
     "completeHistory": "Полная История",
     "quizHistory": "История квизов",
