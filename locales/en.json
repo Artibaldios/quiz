@@ -21,8 +21,14 @@
     "of": "of",
     "submitting": "Submitting...",
     "submitQuiz": "submit Quiz",
-    "nextQuestion": "next question",
+    "nextQuestion": "Next Question",
     "notAvailbale": "No available questions",
+    "homeButton": "Home",
+    "resultsButton": "My Results",
+    "answeredUsers": "answered",
+    "player": "Player",
+    "score": "Score",
+    "finalResults": "Final Results",
     "notFound": "No Data found"
   },
   "quizResultsPage": {
@@ -58,7 +64,8 @@
   "quizCard": {
     "questions": "Questions",
     "played": "Played",
-    "playButton": "Play"
+    "playButton": "Play",
+    "loading": "Loading..."
   },
   "navMenu": {
     "profile": "Profile",

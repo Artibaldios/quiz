@@ -135,22 +135,6 @@ exports.Prisma.UserScalarFieldEnum = {
   quizzesPlayed: 'quizzesPlayed'
 };
 
-exports.Prisma.AccountScalarFieldEnum = {
-  userId: 'userId',
-  type: 'type',
-  provider: 'provider',
-  providerAccountId: 'providerAccountId',
-  refresh_token: 'refresh_token',
-  access_token: 'access_token',
-  expires_at: 'expires_at',
-  token_type: 'token_type',
-  scope: 'scope',
-  id_token: 'id_token',
-  session_state: 'session_state',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.SessionScalarFieldEnum = {
   sessionToken: 'sessionToken',
   userId: 'userId',
@@ -200,6 +184,14 @@ exports.Prisma.UserAnswerScalarFieldEnum = {
   isCorrect: 'isCorrect'
 };
 
+exports.Prisma.LobbyScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  createdAt: 'createdAt',
+  quizId: 'quizId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -233,13 +225,13 @@ exports.Prisma.JsonNullValueFilter = {
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Account: 'Account',
   Session: 'Session',
   VerificationToken: 'VerificationToken',
   Quiz: 'Quiz',
   Question: 'Question',
   UserQuizResult: 'UserQuizResult',
-  UserAnswer: 'UserAnswer'
+  UserAnswer: 'UserAnswer',
+  Lobby: 'Lobby'
 };
 
 /**

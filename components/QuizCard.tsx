@@ -4,12 +4,10 @@ import { formatRelativeDate, getLevelConfig, type LevelConfig, type QuizCardProp
 import { useLocale, useTranslations } from 'next-intl';
 import { 
   Brain, 
-  BookOpen, 
   Globe, 
   Star,
   Coffee,
   Film,
-  Gamepad2,
   Music, 
   HelpCircle, 
   Users,
@@ -18,6 +16,7 @@ import {
   Volleyball,
   Cpu
 } from 'lucide-react';
+import CreateLobbyButton from './createLobbyButton';
 const QuizCard: React.FC<QuizCardProps> = ({
   title,
   category,
@@ -49,8 +48,8 @@ const QuizCard: React.FC<QuizCardProps> = ({
         <div className="flex items-center gap-3 mb-4">
           {/* Category icon */}
           <div className={`
-            w-10 h-10 rounded-xl bg-gradient-to-br flex items-center justify-center
-            shadow-lg transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6
+            w-10 h-10 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500  flex items-center justify-center
+            shadow-lg transform transition-transform duration-300
           `}>
             <CategoryIcon category={category}/>
             
@@ -82,16 +81,7 @@ const QuizCard: React.FC<QuizCardProps> = ({
         
         <div className="flex items-center justify-between">
           <span className="text-xs text-textColor">{formatRelativeDate(createdAt, locale)}</span>
-          <Link href={`/quiz/${id}`} className={`
-            px-6 py-2 rounded-xl font-semibold text-sm
-            bg-gradient-to-r from-blue-600 to-blue-500 
-            shadow-md shadow-blue-500/20 text-white
-            transform transition-all duration-300
-            hover:shadow-blue-500/50 hover:scale-105
-            active:scale-95 cursor-pointer`
-            }>
-            {t("playButton")}
-          </Link>
+          <CreateLobbyButton quizId={id}/>
         </div>
       </div>
     </div>

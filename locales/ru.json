@@ -17,12 +17,18 @@
     "notAvailable": "нет доступных визов"
   },
   "quizPage": {
-    "question": "Вопорос",
+    "question": "Вопрос",
     "of": "из",
     "submitting": "Отправляем...",
     "submitQuiz": "отправить Квиз",
     "nextQuestion": "следующий вопрос",
     "notAvailbale": "Нет доступных вопросов",
+    "homeButton": "Домой",
+    "resultsButton": "Мои результаты",
+    "answeredUsers": "ответили",
+    "player": "Игрок",
+    "score": "Счет",
+    "finalResults": "Финальный Счет",
     "notFound": "не найдено"
   },
   "quizResultsPage": {
@@ -57,7 +63,8 @@
   "quizCard": {
     "questions": "Вопросы",
     "played": "Сыграли",
-    "playButton": "Играть"
+    "playButton": "Играть",
+    "loading": "Загружаем..."
   },
   "navMenu": {
     "profile": "Профиль",

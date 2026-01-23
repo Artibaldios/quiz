@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "npx tsx watch server.ts",
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
@@ -22,6 +22,7 @@
     "bcrypt": "^6.0.0",
     "framer-motion": "^12.23.26",
     "lucide-react": "^0.554.0",
+    "nanoid": "^5.1.6",
     "next": "^16.0.7",
     "next-auth": "^4.24.11",
     "next-intl": "^4.4.0",
@@ -30,7 +31,9 @@
     "react-dom": "19.1.0",
     "react-intersection-observer": "^10.0.0",
     "react-redux": "^9.2.0",
-    "redux": "^5.0.1"
+    "redux": "^5.0.1",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -40,6 +43,7 @@
     "@types/pg": "^8.15.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/socket.io": "^3.0.1",
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
     "prisma": "^7.2.0",

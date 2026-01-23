@@ -10,6 +10,7 @@ import React, { useState } from "react";
 import { Provider } from 'react-redux';
 import { store } from '@/redux/store';
 import { ThemeProvider } from '@/components/ThemeProvider';
+
 interface Messages {
   [key: string]: string | Messages;
 }
@@ -29,6 +30,7 @@ export default function Providers({ children, session, params }: Props) {
   const locale = params.locale;
   const localeMessages = messages[locale as Locale] || messages.en;
   const [queryClient] = useState(() => new QueryClient());
+
   return (
     <SessionProvider session={session} refetchInterval={0} refetchOnWindowFocus={false}>
       <QueryClientProvider client={queryClient}>

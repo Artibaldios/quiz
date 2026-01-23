@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface QuestionWithAnswer {
+export interface QuestionWithAnswer {
   question_text: string;
   options: string[];
   correct_answer: string;
