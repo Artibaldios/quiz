@@ -14,11 +14,12 @@ const lobbyHosts = new Map();
 const lobbyUserAnswers = new Map();
 const lobbyQuestionIndex = new Map();
 const lobbyTimers = new Map();
-const getLobbyUsers = () => {
+
+const getLobbyUsers = (lobbyCode) => {
   return lobbies.get(lobbyCode) || [];
 };
 
-const addUserToLobby = () => {
+const addUserToLobby = (lobbyCode, user) => {
   const currentUsers = getLobbyUsers(lobbyCode);
   if (!currentUsers.find(u => u.id === user.id)) {
     const updatedUsers = [...currentUsers, user];
@@ -27,7 +28,7 @@ const addUserToLobby = () => {
   }
 };
 
-const removeUserFromLobby = () => {
+const removeUserFromLobby = (lobbyCode, userId) => {
   const currentUsers = getLobbyUsers(lobbyCode);
   const updatedUsers = currentUsers.filter(u => u.id !== userId);
   lobbies.set(lobbyCode, updatedUsers);
@@ -164,8 +165,6 @@ app.prepare().then(() => {
         score = Math.floor(1000 * (timeRemaining / maxTime));
       }
 
-      console.log("Score calculated:", score, "answerTime:", answerTime);
-
       io.to(lobbyCode).emit('user-answered', {
         userId, questionIndex, answer, answeredUsers, allAnswered, username,
         allUsers, totalUsers, score, answerTime
@@ -240,8 +239,6 @@ app.prepare().then(() => {
         isRunning: true,
         duration: NEW_QUESTION_DURATION
       });
-
-      console.log(`➡️ ${lobbyCode}: Advanced to Q${nextIndex}, timer reset to ${NEW_QUESTION_DURATION}s`);
     });
 
     socket.on('get-lobby-history', ({ lobbyCode }) => {
@@ -288,8 +285,6 @@ app.prepare().then(() => {
     });
 
     socket.on('question-timer-ended', ({ lobbyCode }) => {
-      console.log(`⏰ ${lobbyCode}: Timer ended`);
-
       const allUsers = getLobbyUsers(lobbyCode);
       const questionIndex = lobbyQuestionIndex.get(lobbyCode) || 0;
       const timer = lobbyTimers.get(lobbyCode);
@@ -308,8 +303,6 @@ app.prepare().then(() => {
         if (!questionAnswers.has(user.id)) {
           // ✅ UNANSWERED = 0 score
           questionAnswers.set(user.id, ''); // empty answer
-          console.log(`⏰ ${user.name} didn't answer Q${questionIndex} → 0 score`);
-
           // Emit the "answered" event for unanswered users too
           io.to(lobbyCode).emit('user-answered', {
             userId: user.id,
@@ -372,8 +365,6 @@ app.prepare().then(() => {
 
       // ✅ AUTO-ADVANCE WHEN TIMER HITS 0
       if (timer.isRunning && timer.timeLeft <= 0) {
-        console.log(`⏰ ${lobbyCode}: Timer ended - auto advancing`);
-
         // 1. Record 0 scores for unanswered users
         const allUsers = getLobbyUsers(lobbyCode);
         const questionIndex = lobbyQuestionIndex.get(lobbyCode) || 0;
@@ -415,6 +406,5 @@ app.prepare().then(() => {
 
   httpServer.listen(port, hostname, () => {
     console.log(`🌐 Next.js + Socket.IO Ready on http://${hostname}:${port}`);
-    console.log(`📡 Socket.IO endpoint: http://${hostname}:${port}/api/socket`);
   });
 });
