@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function CreateLobbyButton({ quizId }: { quizId: number }) {
-  const router = useRouter();  
+  const router = useRouter();
   const t = useTranslations("quizCard");
   const locale = useLocale();
   const [loading, setLoading] = useState(false);
@@ -36,7 +36,7 @@ export default function CreateLobbyButton({ quizId }: { quizId: number }) {
       disabled={loading}
       className={`
         px-6 py-2 rounded-xl font-semibold text-sm
-        bg-gradient-to-r from-blue-600 to-blue-500 
+        bg-linear-to-r from-blue-600 to-blue-500 
         shadow-md shadow-blue-500/20 text-white
         transform transition-all duration-300
         hover:shadow-blue-500/50 hover:scale-105

@@ -14,13 +14,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Generate unique 6-char code
+    // Generate unique 4-char code
     let code: string;
     let existingLobby;
     
     // Ensure unique code
     do {
-      code = nanoid(6).toUpperCase();
+      code = nanoid(4).toUpperCase();
       existingLobby = await prisma.lobby.findUnique({ where: { code } });
     } while (existingLobby);
 

@@ -20,7 +20,7 @@ export default function LobbyInput() {
   const [message, setMessage] = useState<{ type: 'error' | 'success', text: string } | null>(null);
   const router = useRouter();
   const locale = useLocale();
-
+  const t = useTranslations("homePage");
   const checkLobby = async () => {
     if (!lobbyCode.trim()) return;
 
@@ -67,25 +67,24 @@ export default function LobbyInput() {
   };
 
   return (
-    <div className={`p-8`}>
+    <div className={`m-4 md:p-8`}>
       <div className="relative max-w-md mx-auto">
         {/* Glassmorphism Container */}
-        <div className="glass-container p-8 rounded-3xl shadow-2xl border border-white/20 backdrop-blur-xl bg-white/10">
+        <div className="glass p-8 rounded-3xl shadow-2xl border border-white/20 backdrop-blur-xl bg-white/10">
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-textColor/60 mb-2">
-              Join Lobby
+            <h2 className="text-2xl font-bold text-textColor mb-2">
+              {t("joinLobby")}
             </h2>
-            <p className="text-textColor/60 text-lg">Enter 6-character lobby code</p>
+            <p className="text-textColor/60 text-lg">{t("enterCode")}</p>
           </div>
 
           {/* Message Display */}
           {message && (
-            <div 
-              className={`mb-6 p-4 rounded-xl text-center transition-all duration-300 ${
-                message.type === 'success' 
-                  ? 'bg-green-500/20 border border-green-400/50 text-green-100' 
+            <div
+              className={`mb-6 p-4 rounded-xl text-center transition-all duration-300 ${message.type === 'success'
+                  ? 'bg-green-500/20 border border-green-400/50 text-green-100'
                   : 'bg-red-500/20 border border-red-400/50 text-red-100'
-              }`}
+                }`}
               onClick={clearMessage}
             >
               {message.text}
@@ -94,6 +93,20 @@ export default function LobbyInput() {
 
           {/* Input Field */}
           <div className="relative mb-8">
+            <svg
+              className="absolute left-1/3 top-1/2 transform -translate-y-1/2 z-10 pointer-events-none fill-blue-950 dark:fill-textColor"
+              viewBox="0 0 24 24"
+              width={24}
+              height={24}
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                className="fill-blue-950 dark:fill-textColor"
+                d="M11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19C12.8487 19 14.551 18.3729 15.9056 17.3199L19.2929 20.7071C19.6834 21.0976 20.3166 21.0976 20.7071 20.7071C21.0976 20.3166 21.0976 19.6834 20.7071 19.2929L17.3199 15.9056C18.3729 14.551 19 12.8487 19 11C19 6.58172 15.4183 3 11 3ZM5 11C5 7.68629 7.68629 5 11 5C14.3137 5 17 7.68629 17 11C17 14.3137 14.3137 17 11 17C7.68629 17 5 14.3137 5 11Z"
+              />
+            </svg>
             <input
               type="text"
               value={lobbyCode}
@@ -102,23 +115,18 @@ export default function LobbyInput() {
                 clearMessage();
               }}
               onKeyPress={handleKeyPress}
-              placeholder="A1S4GS"
-              maxLength={6}
+              placeholder="A1S4"
+              maxLength={4}
               disabled={loading}
-              className="glass w-full px-6 py-4 text-lg bg-white/5 border border-white/20 rounded-2xl backdrop-blur-md focus:outline-none focus:ring-4 focus:ring-white/30 focus:border-white/40 transition-all duration-300 text-textColor/60 uppercase tracking-wider text-center font-mono"
+              className="glass w-full px-6 py-4 text-lg bg-white/5 border border-white/20 rounded-2xl backdrop-blur-md focus:outline-none focus:ring-4 focus:ring-white/30 focus:border-white/40 transition-all duration-300 text-textColor uppercase tracking-wider text-center placeholder:text-textColor"
             />
-            {lobbyCode.length === 6 && (
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-full h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" />
-              </div>
-            )}
           </div>
 
           {/* Get Lobby Button */}
           <button
             onClick={checkLobby}
-            disabled={!lobbyCode.trim() || loading || lobbyCode.length !== 6}
-            className="glass-button w-full py-4 px-8 text-xl font-semibold rounded-2xl backdrop-blur-lg bg-gradient-to-r from-cyan-400/20 to-blue-500/20 border border-white/30 hover:from-cyan-500/30 hover:to-blue-600/30 hover:shadow-[0_0_25px_rgba(34,197,94,0.5)] active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none relative overflow-hidden group"
+            disabled={!lobbyCode.trim() || loading || lobbyCode.length !== 4}
+            className=" w-full py-4 px-8 text-xl  text-white font-semibold rounded-2xl bg-linear-to-r from-blue-600 to-blue-500  active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none relative overflow-hidden group cursor-pointer"
           >
             {loading ? (
               <span className="flex items-center justify-center gap-2">
@@ -126,7 +134,7 @@ export default function LobbyInput() {
                 Checking...
               </span>
             ) : (
-              'Get Lobby'
+              t("searchLobbyButton")
             )}
           </button>
         </div>

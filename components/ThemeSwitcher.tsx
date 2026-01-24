@@ -4,7 +4,7 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import { useTranslations } from "next-intl";
 
-export default function ThemeSwitcher({text}: {text: boolean}) {
+export default function ThemeSwitcher({ text }: { text: boolean }) {
   const { theme, toggleTheme } = useTheme();
   const t = useTranslations("navMenu");
   return (

@@ -125,9 +125,6 @@ export default function QuizPage() {
   const [showCurrentResults, setShowCurrentResults] = useState(false);
   const [currentQuestionResults, setCurrentQuestionResults] = useState<UserResult[]>([]);
   const [allQuizResults, setAllQuizResults] = useState<Record<number, UserResult[]>>({});
-
-
-  // ✅ NEW: Final quiz results
   const [quizFinished, setQuizFinished] = useState(false);
 
 
@@ -136,9 +133,9 @@ export default function QuizPage() {
     Object.values(
       Object.values(allQuizResults)
         .flat()
-        .reduce<Record<string, TotalScore>>((acc, { userId, score, username }) => {
+        .reduce<Record<string, TotalScore>>((acc, { userId, score, username, isCorrect }) => {
           acc[userId] ??= { userId, score: 0, name: username };
-          acc[userId].score += score;
+          if (isCorrect) acc[userId].score += score;
           return acc;
         }, {})
     ),
@@ -172,12 +169,11 @@ export default function QuizPage() {
   }, [socket, status, session, lobbyCode]);
 
 
-  useEffect(() => {
-    if (lobbyUsers.length === 0 && isConnected && session && socket) {
-      console.log('🔄 Re-joining EMPTY lobby:', lobbyCode);
-      joinLobby(session.user.id!, session.user.name!);
-    }
-  }, [lobbyUsers.length, isConnected, session, socket, lobbyCode, joinLobby]);
+  // useEffect(() => {
+  //   if (lobbyUsers.length === 0 && isConnected && session && socket) {
+  //     joinLobby(session.user.id!, session.user.name!);
+  //   }
+  // }, [lobbyUsers.length, isConnected, session, socket, lobbyCode, joinLobby]);
 
 
   // ✅ UPDATED: Smart continue handler (next vs finish)
@@ -186,10 +182,8 @@ export default function QuizPage() {
       const isLastQuestion = quizLogic.currentQuestionIndex === (questions?.length || 0) - 1;
 
       if (isLastQuestion) {
-        console.log('🏁 Host → finishing quiz');
         socket.emit('finish-quiz', { lobbyCode });
       } else {
-        console.log('🎯 Host → next question');
         socket.emit('next-question', { lobbyCode });
       }
     }
@@ -209,7 +203,6 @@ export default function QuizPage() {
       settings: LobbySettings;
       currentQuestionIndex: number;
     }) => {
-      console.log('🎯 Quiz initialized:', { totalUsers, hostId });
     };
 
 
@@ -257,7 +250,6 @@ export default function QuizPage() {
         } else {
           newResults[questionIndex].push(userResult);
         }
-        console.log("newResults", newResults)
         return newResults;
       });
 
@@ -312,8 +304,6 @@ export default function QuizPage() {
 
 
     const handleQuestionAdvanced = ({ currentQuestionIndex }: { currentQuestionIndex: number }) => {
-      console.log('📱 ALL clients → question', currentQuestionIndex);
-
       // Server drives question progression
       quizLogic.goToQuestion(currentQuestionIndex);
 
@@ -322,8 +312,6 @@ export default function QuizPage() {
       setCurrentQuestionResults([]);
       setCurrentAnsweredUsersMap(new Map());
       setTimer(lobbySettings.questionTimer);
-
-      // ✅ allQuizResults persists automatically!
     };
 
 
@@ -494,18 +482,17 @@ function Timer({ timer, isTimerRunning, t, isHost, pauseTimer, resumeTimer, tota
   return (
     <div className="flex justify-between items-center m-4 gap-4 md:gap-12">
       {/* Timer Progress Bar */}
-      <div className={`w-64 h-6 bg-white rounded-full shadow-lg border-4 border-gray-100 overflow-hidden ${timer < 4 ? 'animate-pulse' : ''}`}>
+      <div className={`w-48 h-6 bg-white rounded-full shadow-lg border-4 border-gray-100 overflow-hidden md:w-64 ${timer < 4 ? 'animate-pulse' : ''} ${isHost ? "w-48" : "w-64"}`}>
         <div
           className={`h-full rounded-full transition-all duration-100 ease-linear shadow-md ${timer < 4
-              ? 'bg-red-400 border-r-4 border-red-500'
-              : timer < 7
-                ? 'bg-yellow-400 border-r-4 border-yellow-500'
-                : 'bg-primary border-r-4 border-blue-800'
+            ? 'bg-red-400 border-r-4 border-red-500'
+            : timer < 7
+              ? 'bg-yellow-400 border-r-4 border-yellow-500'
+              : 'bg-primary border-r-4 border-blue-800'
             }`}
           style={{ width: `${percentage}%` }}
         />
       </div>
-
       {/* Host Controls */}
       {isHost && (
         <div className="flex gap-2">
@@ -550,26 +537,28 @@ function FinalResults({ totalScores, lobbyUsers, t, quizLogic }: FinalResultsPro
 
         {/* Mobile: Card Layout */}
         <div className="block sm:hidden space-y-3 max-w-md mx-auto">
-          {totalScores.map((result, index) => (
-            <div key={result.userId} className="glass backdrop-blur-md rounded-xl shadow-lg border border-white/50 p-4">
-              <div className="flex items-center justify-between mb-2">
-                <div className='flex items-center gap-2'>
-                  <div className="text-xl font-bold text-indigo-600 flex-shrink-0">
-                    {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-lg font-bold text-white shadow-md flex-shrink-0">
-                      {result.name.charAt(0).toUpperCase()}
+          {totalScores
+            .sort((a, b) => b.score - a.score)
+            .map((result, index) => (
+              <div key={result.userId} className="glass backdrop-blur-md rounded-xl shadow-lg border border-white/50 p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className='flex items-center gap-2'>
+                    <div className="text-xl font-bold text-indigo-600 shrink-0">
+                      {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1}
                     </div>
-                    <span className="text-base font-semibold text-textColor flex-1">{result.name}</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-10 h-10 bg-linear-to-r from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center text-lg font-bold text-white shadow-md shrink-0">
+                        {result.name.charAt(0).toUpperCase()}
+                      </div>
+                      <span className="text-base font-semibold text-textColor flex-1">{result.name}</span>
+                    </div>
                   </div>
+                  <span className="text-xl font-black text-primary">
+                    {result.score.toLocaleString()} pts
+                  </span>
                 </div>
-                <span className="text-xl font-black text-primary">
-                  {result.score.toLocaleString()} pts
-                </span>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
 
 
@@ -585,20 +574,20 @@ function FinalResults({ totalScores, lobbyUsers, t, quizLogic }: FinalResultsPro
             </thead>
             <tbody className="divide-y divide-gray-200">
               {totalScores.map((result, index) => (
-                <tr key={result.userId} className="bg-gray-100">
+                <tr key={result.userId} className="bg-white/50 dark:bg-white/90">
                   <td className="px-3 sm:px-6 py-3 sm:py-4 font-bold text-lg sm:text-xl text-indigo-600 w-14">
                     {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1}
                   </td>
                   <td className="px-3 sm:px-6 py-3 sm:py-4">
                     <div className="flex items-center gap-2 sm:gap-3">
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg sm:rounded-xl flex items-center justify-center text-lg sm:text-xl font-bold text-white shadow-lg flex-shrink-0">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-linear-to-r from-indigo-500 to-purple-600 rounded-lg sm:rounded-xl flex items-center justify-center text-lg sm:text-xl font-bold text-white shadow-lg shrink-0">
                         {result.name.charAt(0).toUpperCase()}
                       </div>
                       <span className="text-base sm:text-lg font-bold text-gray-900">{result.name}</span>
                     </div>
                   </td>
                   <td className="px-3 sm:px-6 py-3 sm:py-4 text-right">
-                    <span className="text-xl sm:text-2xl lg:text-3xl font-black bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">
+                    <span className="text-xl sm:text-2xl lg:text-3xl font-black bg-linear-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">
                       {result.score.toLocaleString()} pts
                     </span>
                   </td>
@@ -613,13 +602,13 @@ function FinalResults({ totalScores, lobbyUsers, t, quizLogic }: FinalResultsPro
       <div className="flex flex-col items-center justify-center gap-2 sm:gap-3 pt-2 md:flex-row">
         <button
           onClick={() => router.push('/')}
-          className="glass w-full px-4 sm:px-8 py-2.5 sm:py-3 dark:bg-gradient-to-r dark:from-gray-400 dark:to-gray-500 dark:hover:from-gray-500 dark:hover:to-gray-600 text-textColor dark:text-white text-sm sm:text-base font-bold rounded-lg sm:rounded-xl shadow-xl min-h-[44px] flex items-center justify-center cursor-pointer"
+          className="glass w-full px-4 sm:px-8 py-2.5 sm:py-3 dark:bg-linear-to-r dark:from-gray-400 dark:to-gray-500 dark:hover:from-gray-500 dark:hover:to-gray-600 text-textColor dark:text-white text-sm sm:text-base font-bold rounded-lg sm:rounded-xl shadow-xl min-h-11 flex items-center justify-center cursor-pointer"
         >
           {t("homeButton")}
         </button>
         <button
           onClick={() => quizLogic.goNext()}
-          className="w-full px-4 sm:px-8 py-2.5 sm:py-3 bg-primary text-white text-sm sm:text-base font-bold rounded-lg sm:rounded-xl shadow-xl min-h-[44px] flex items-center justify-center cursor-pointer"
+          className="w-full px-4 sm:px-8 py-2.5 sm:py-3 bg-primary text-white text-sm sm:text-base font-bold rounded-lg sm:rounded-xl shadow-xl min-h-11 flex items-center justify-center cursor-pointer"
         >
           {t("resultsButton")}
         </button>
@@ -628,8 +617,6 @@ function FinalResults({ totalScores, lobbyUsers, t, quizLogic }: FinalResultsPro
   );
 }
 
-
-// Updated QuizHeader with total scores
 interface QuizHeaderProps {
   quiz: FetchedQuizData;
   progress: number;
@@ -650,7 +637,6 @@ interface QuizHeaderProps {
   resumeTimer: () => void;
 }
 
-
 function QuizHeader({
   quiz,
   progress,
@@ -660,7 +646,7 @@ function QuizHeader({
   totalUsers,
 }: QuizHeaderProps) {
   return (
-    <div className="w-full mb-6 px-2 md:max-w-200">
+    <div className="w-full px-2 mb-2 md:mb-6 md:max-w-200">
       <div className="flex justify-between items-center my-2">
         <h2 className="text-lg md:text-2xl font-bold text-primary hidden sm:block">
           {quiz.title}
@@ -681,7 +667,7 @@ function QuizHeader({
       </div>
 
       {/* Progress bar */}
-      <div className="w-full bg-white rounded-full h-3 shadow-inner">
+      <div className="w-full bg-white rounded-full h-3 shadow-inner hidden sm:block">
         <div
           className="bg-primary h-3 rounded-full shadow-lg transition-all duration-500"
           style={{ width: `${progress}%` }}
@@ -708,14 +694,13 @@ function QuizContent({
   currentAnsweredUsersArr: Pick<User, 'name'>[];
   lobbyUsers: User[];
 }) {
-
   return (
-    <div className="bg-bgContent rounded-2xl shadow-xl border p-8 md:w-150 border-gray-200">
-      <div className="mb-8 text-center">
-        <span className="inline-block px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-sm font-bold rounded-full mb-6 shadow-lg">
+    <div className="bg-bgContent rounded-2xl shadow-xl border p-4 md:w-150 border-gray-200 md:p-8">
+      <div className="mb-6 text-center md:mb-8">
+        <span className="inline-block px-4 py-2 bg-linear-to-r from-blue-500 to-indigo-600 text-white text-sm font-bold rounded-full mb-6 shadow-lg">
           {currentQuestion.topic}
         </span>
-        <h3 className="text-2xl md:text-3xl font-bold text-textColor mb-2 leading-tight">
+        <h3 className="text-lg md:text-3xl font-bold text-textColor leading-tight">
           {currentQuestion.question_text}
         </h3>
       </div>
@@ -727,15 +712,18 @@ function QuizContent({
             key={`${currentQuestion.id}-option-${index}`}
             onClick={() => updateAnswer(currentQuestionIndex, option)}
             disabled={quizLogic.isSubmitting || selectedAnswer !== null}
-            className={`group w-full p-6 text-left rounded-xl border-2 transition-all duration-300 shadow-md ${selectedAnswer === option
-                ? "border-primary bg-gradient-to-r from-blue-50 to-indigo-50 text-primary shadow-primary-lg"
-                : "border-gray-200 hover:border-primary/50 hover:bg-gradient-to-r hover:from-gray-50 hover:to-blue-50"
+            className={`group w-full p-4 text-left text-md rounded-xl border-2 transition-all duration-300 shadow-md md:p-6 ${selectedAnswer === option
+              ? "border-primary bg-linear-to-r from-gray-100 to-gray-300 text-primary shadow-primary-lg"
+              : "border-gray-200 hover:border-primary/50 hover:bg-linear-to-r hover:from-gray-50 hover:to-blue-50"
               } disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-md disabled:hover:translate-y-0`}
           >
-            <span className="font-bold text-xl mr-4 text-primary group-hover:text-primary-dark">
+            <span className="font-bold text-md mr-4 text-primary group-hover:text-primary-dark md:text-xl">
               {String.fromCharCode(65 + index)}.
             </span>
-            <span className="text-lg font-semibold text-textColor">{option}</span>
+            <span className={`text-sm font-semibold text-textColor md:text-lg ${selectedAnswer === option
+              ? "dark:text-primary"
+              : ""
+              }`}>{option}</span>
           </button>
         ))}
       </div>
@@ -746,7 +734,7 @@ function QuizContent({
           {currentAnsweredUsersArr.map((user) => (
             <div
               key={user.name}
-              className="relative w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-lg hover:scale-110 transition-all duration-200 group"
+              className="relative w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-linear-to-r from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-lg hover:scale-110 transition-all duration-200 group"
               title={`${user.name} answered`}
             >
               <span className="text-base drop-shadow-md">
@@ -775,7 +763,6 @@ interface QuizResultsProps {
   t: QuizPageTranslations;
 }
 
-
 function QuizResults({
   currentQuestionResults,
   onContinue,
@@ -788,7 +775,7 @@ function QuizResults({
       <div className="overflow-x-auto rounded-2xl mb-8">
         <table className="w-full bg-white shadow-lg border border-gray-200">
           <thead>
-            <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+            <tr className="bg-linear-to-r from-gray-50 to-gray-100 border-b border-gray-200">
               <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
                 {t("player")}
               </th>
@@ -798,27 +785,35 @@ function QuizResults({
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {currentQuestionResults.map(({ userId, username, score, isCorrect }) => (
-              <tr key={userId} className="hover:bg-gray-50 transition-colors">
-                <td className="px-2 py-4 whitespace-nowrap md:px-6">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-3 h-3 rounded-full shadow-sm ${isCorrect ? 'bg-blue-500' : 'bg-red-500'
-                      }`} />
-                    <span className="font-semibold text-gray-900 max-w-[200px] truncate">
-                      {username}
-                    </span>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right">
-                  <span className={`font-bold text-lg ${isCorrect
+            {currentQuestionResults
+              .sort((a, b) => {
+                // 1. isCorrect: true first (1 > 0)
+                if (Number(a.isCorrect) !== Number(b.isCorrect)) {
+                  return Number(b.isCorrect) - Number(a.isCorrect); // true(1) > false(0)
+                }
+                return b.score - a.score;
+              })
+              .map(({ userId, username, score, isCorrect }) => (
+                <tr key={userId} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-2 py-4 whitespace-nowrap md:px-6">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-3 h-3 rounded-full shadow-sm ${isCorrect ? 'bg-blue-500' : 'bg-red-500'
+                        }`} />
+                      <span className="font-semibold text-gray-900 max-w-[200px] truncate">
+                        {username}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right">
+                    <span className={`font-bold text-lg ${isCorrect
                       ? 'text-blue-600 bg-gray-100 px-3 py-1 rounded-full'
                       : 'text-gray-500'
-                    }`}>
-                    {isCorrect ? `${score} pts` : `0 pts`}
-                  </span>
-                </td>
-              </tr>
-            ))}
+                      }`}>
+                      {isCorrect ? `${score} pts` : `0 pts`}
+                    </span>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
@@ -839,7 +834,6 @@ function QuizResults({
   );
 }
 
-
 function LoaderUI() {
   return (
     <div className="min-h-[400px] flex items-center justify-center">
@@ -847,7 +841,6 @@ function LoaderUI() {
     </div>
   );
 }
-
 
 function ErrorUI({ t }: { t: QuizPageTranslations }) {
   return (

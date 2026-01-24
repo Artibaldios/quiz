@@ -1,5 +1,6 @@
 import { Settings, Timer, RotateCcw, Play } from "lucide-react";
 import { LobbySettings as LobbySettingsType } from "@/types/quiz";
+import { useTranslations } from "next-intl";
 
 interface LobbySettingsProps {
   settings: LobbySettingsType;
@@ -7,6 +8,7 @@ interface LobbySettingsProps {
 }
 
 const LobbySettings = ({ settings, onSettingsChange }: LobbySettingsProps) => {
+  const t = useTranslations("lobby");
   const handleQuestionTimerChange = (value: number[]) => {
     onSettingsChange({ ...settings, questionTimer: value[0] });
   };
@@ -20,10 +22,10 @@ const LobbySettings = ({ settings, onSettingsChange }: LobbySettingsProps) => {
   };
 
   return (
-    <div className="glass-solid p-6 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+    <div className="glass p-4 animate-fade-in rounded-2xl sm:p-6" style={{ animationDelay: "0.2s" }}>
       <div className="flex items-center gap-2 mb-6">
         <Settings className="w-5 h-5 text-primary" />
-        <h2 className="text-lg font-semibold text-foreground">Game Settings</h2>
+        <h2 className="text-lg font-semibold text-foreground">{t("settings")}</h2>
       </div>
 
       <div className="space-y-6">
@@ -32,7 +34,7 @@ const LobbySettings = ({ settings, onSettingsChange }: LobbySettingsProps) => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Timer className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm font-medium text-foreground">Question Timer</span>
+              <span className="text-sm font-medium text-foreground">{t("questionTimer")}</span>
             </div>
             <span className="text-sm font-bold text-primary">{settings.questionTimer}s</span>
           </div>
@@ -55,7 +57,7 @@ const LobbySettings = ({ settings, onSettingsChange }: LobbySettingsProps) => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <RotateCcw className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm font-medium text-foreground">Result Display</span>
+              <span className="text-sm font-medium text-foreground">{t("resultDisplay")}</span>
             </div>
             <span className="text-sm font-bold text-primary">{settings.resultTimer}s</span>
           </div>
@@ -74,7 +76,7 @@ const LobbySettings = ({ settings, onSettingsChange }: LobbySettingsProps) => {
         </div>
 
         {/* Auto Continue */}
-        <div className="glass p-4 rounded-xl flex items-center justify-between">
+        {/* <div className="glass p-4 rounded-xl flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Play className="w-4 h-4 text-muted-foreground" />
             <div>
@@ -85,8 +87,8 @@ const LobbySettings = ({ settings, onSettingsChange }: LobbySettingsProps) => {
           {/* <Switch
             checked={settings.autoContinue}
             onCheckedChange={handleAutoContinueChange}
-          /> */}
-        </div>
+          /> 
+        </div> */}
       </div>
     </div>
   );

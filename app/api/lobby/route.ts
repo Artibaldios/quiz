@@ -6,9 +6,9 @@ export async function POST(req: NextRequest) {
     const { code } = await req.json();
 
     // Validate required fields
-    if (!code || code.trim().length !== 6) {
+    if (!code || code.trim().length !== 4) {
       return NextResponse.json(
-        { error: 'Valid 6-character lobby code is required' },
+        { error: 'Valid 4-character lobby code is required' },
         { status: 400 }
       );
     }

@@ -51,13 +51,12 @@ const Loader: React.FC<LoaderProps> = ({
       {[...Array(3)].map((_, i) => (
         <div
           key={i}
-          className={`animate-bounce rounded-full ${colorClasses[color]} ${
-            size === 'xs' ? 'h-1 w-1' :
-            size === 'sm' ? 'h-1.5 w-1.5' :
-            size === 'md' ? 'h-2 w-2' :
-            size === 'lg' ? 'h-2.5 w-2.5' :
-            'h-3 w-3'
-          }`}
+          className={`animate-bounce rounded-full ${colorClasses[color]} ${size === 'xs' ? 'h-1 w-1' :
+              size === 'sm' ? 'h-1.5 w-1.5' :
+                size === 'md' ? 'h-2 w-2' :
+                  size === 'lg' ? 'h-2.5 w-2.5' :
+                    'h-3 w-3'
+            }`}
           style={{ animationDelay: `${i * 0.1}s` }}
         />
       ))}

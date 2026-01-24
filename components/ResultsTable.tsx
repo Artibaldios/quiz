@@ -20,9 +20,10 @@ export const QuizResultsList: React.FC<QuizResultsListProps> = ({ results }) => 
           <h3 className="text-lg font-semibold">{quizTitle}</h3>
           <div className="text-sm text-gray-600">Score: {score}</div>
           <div className="text-xs text-gray-500">
-            Completed: {new Date(createdAt).toLocaleDateString(undefined, { 
+            Completed: {new Date(createdAt).toLocaleDateString(undefined, {
               year: 'numeric', month: 'short', day: 'numeric',
-              hour: '2-digit', minute: '2-digit' })}
+              hour: '2-digit', minute: '2-digit'
+            })}
           </div>
         </div>
       ))}

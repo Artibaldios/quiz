@@ -5,9 +5,9 @@ interface DynamicProgressProps {
   duration?: number;
 }
 
-export const DynamicProgress: React.FC<DynamicProgressProps> = ({ 
-  targetValue, 
-  duration = 2000 
+export const DynamicProgress: React.FC<DynamicProgressProps> = ({
+  targetValue,
+  duration = 2000
 }) => {
   const [progress, setProgress] = useState(0);
   const [displayText, setDisplayText] = useState('0%');
@@ -30,7 +30,7 @@ export const DynamicProgress: React.FC<DynamicProgressProps> = ({
 
   return (
     <div className="w-full bg-white dark:bg-gray-100  rounded-full h-6 relative overflow-hidden shadow-md mt-2 mb-4">
-      <div 
+      <div
         className="bg-primary h-full transition-all duration-100 ease-linear rounded-full flex items-center justify-center border-4 border-primary font-bold text-white text-sm shadow-lg"
         style={{ width: `${progress}%` }}
       >

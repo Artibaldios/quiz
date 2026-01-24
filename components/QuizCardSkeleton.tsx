@@ -18,7 +18,7 @@ export const QuizCardSkeleton: React.FC = () => {
       ">
         {/* Title */}
         <div className="h-7 bg-gradient-to-r from-blue-500/70 to-purple-500/70 dark:from-zinc-600/70 dark:to-zinc-500/70 rounded-md w-3/4"></div>
-        
+
         {/* Icons row */}
         <div className="flex items-center gap-3">
           {/* Music icon */}
@@ -40,7 +40,7 @@ export const QuizCardSkeleton: React.FC = () => {
             backdrop-blur border border-white/10
           "></div>
         </div>
-        
+
         {/* Stats row */}
         <div className="flex items-center gap-4 text-sm">
           {/* Level badge */}
@@ -54,7 +54,7 @@ export const QuizCardSkeleton: React.FC = () => {
           {/* Plays */}
           <div className="flex items-center gap-1 w-28 h-5 bg-gradient-to-r from-blue-500/70 to-purple-500/70 dark:from-zinc-600/70 dark:to-zinc-500/70 rounded"></div>
         </div>
-        
+
         {/* Date and Button */}
         <div className="flex items-center justify-between">
           <div className="w-20 h-4 bg-gradient-to-r from-blue-500/80 to-purple-500/80 dark:from-zinc-600/70 dark:to-zinc-500/70 rounded"></div>

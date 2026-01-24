@@ -6,8 +6,8 @@ export default function Home() {
         signOut({ callbackUrl: "/login" });
     };
     return (
-    <button onClick={handleLogout} className="btn-logout">
-        Logout
-    </button>
+        <button onClick={handleLogout} className="btn-logout">
+            Logout
+        </button>
     )
 }

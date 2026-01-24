@@ -8,7 +8,8 @@
     "build": "next build --turbopack",
     "start": "node server.js",
     "lint": "eslint",
-    "seed": "node prisma/seed.ts"
+    "seed": "node prisma/seed.ts",
+    "testDev": "npx tsx watch testServer.ts"
   },
   "engines": {
     "node": "20"

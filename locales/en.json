@@ -14,7 +14,10 @@
     "questions": "questions",
     "upd": "Updated just now",
     "notFound": "No Data found",
-    "notAvailable": "No quizzes available"
+    "notAvailable": "No quizzes available",
+    "joinLobby": "Join Lobby",
+    "enterCode": "Enter 4-character lobby code",
+    "searchLobbyButton": "Search Lobby"
   },
   "quizPage": {
     "question": "Question",
@@ -65,6 +68,18 @@
     "played": "Played",
     "playButton": "Play",
     "loading": "Loading..."
+  },
+  "lobby":{
+    "code": "Lobby Code",
+    "share": "Share this code with friends",
+    "settings": "Game Settings",
+    "questionTimer": "Question Timer",
+    "resultDisplay": "Result Display Time",
+    "players": "Players",
+    "questions": "Questions",
+    "total": "Total Plays",
+    "created": "Created",
+    "topic": "Topics"
   },
   "navMenu": {
     "profile": "Profile",

@@ -14,7 +14,10 @@
     "questions": "вопросов",
     "upd": "Обновлено только что",
     "notFound": "не найдено",
-    "notAvailable": "нет доступных визов"
+    "notAvailable": "нет доступных визов",
+    "joinLobby": "Присоединиться к лобби",
+    "enterCode": "Введите 4-символьный код лобби",
+    "searchLobbyButton": "Искать лобби"
   },
   "quizPage": {
     "question": "Вопрос",
@@ -65,6 +68,18 @@
     "played": "Сыграли",
     "playButton": "Играть",
     "loading": "Загружаем..."
+  },
+  "lobby":{
+    "code": "Код Лобби",
+    "share": "Поделитесь кодом с друзьями",
+    "settings": "Настройки Игры",
+    "questionTimer": "Время на вопрос",
+    "resultDisplay": "Время результатов",
+    "players": "Игроки",
+    "questions": "Вопросы",
+    "total": "Всего сыграно",
+    "created": "Создано",
+    "topic": "Темы"
   },
   "navMenu": {
     "profile": "Профиль",

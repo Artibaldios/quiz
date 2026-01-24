@@ -5,7 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { User, Menu, X, User as UserIcon, LogOut } from "lucide-react";
 import LocaleSwitcher from "./LocaleSwitcher";
-import ThemeSwitcher  from "./ThemeSwitcher";
+import ThemeSwitcher from "./ThemeSwitcher";
 import { useTranslations } from "next-intl";
 
 export const NavMenu = () => {
@@ -21,7 +21,7 @@ export const NavMenu = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-gray-200/50 backdrop-blur-xl bg-white/80 dark:bg-zinc-900/80 supports-[backdrop-filter:blur()]:bg-white/60 supports-[backdrop-filter:blur()]:dark:bg-zinc-900/60 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          
+
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 group">
             <div className="w-10 h-10 bg-linear-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-200">
@@ -68,21 +68,21 @@ export const NavMenu = () => {
                         {session.user?.email}
                       </p>
                     </div>
-                    
+
                     <div className="space-y-1 px-2 pt-2">
-                      <Link 
-                        href="/profile" 
+                      <Link
+                        href="/profile"
                         className="flex items-center space-x-3 px-4 py-3 text-sm rounded-xl hover:bg-blue-50/50 dark:hover:bg-blue-500/10 transition-all duration-200 group"
                         onClick={() => setProfileMenuOpen(false)}
                       >
                         <User className="w-5 h-5 text-gray-500 group-hover:text-blue-600" />
                         <span className="font-medium text-gray-900 dark:text-white group-hover:text-blue-600">{t("profile")}</span>
                       </Link>
-                      
-                      <ThemeSwitcher text={true}/>
-                      
-                      <LocaleSwitcher text={true}/>
-                      
+
+                      <ThemeSwitcher text={true} />
+
+                      <LocaleSwitcher text={true} />
+
                       <button
                         onClick={() => {
                           signOut();
@@ -99,8 +99,8 @@ export const NavMenu = () => {
               </div>
             ) : (
               <div className="flex gap-2 justify-center items-center">
-                <ThemeSwitcher text={false}/>
-                <LocaleSwitcher text={false}/>
+                <ThemeSwitcher text={false} />
+                <LocaleSwitcher text={false} />
                 <button
                   onClick={() => signIn()}
                   className="px-5 py-2.5 bg-linear-to-r from-blue-500 to-blue-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer"
@@ -131,42 +131,42 @@ export const NavMenu = () => {
         <div className="md:hidden bg-white/80 dark:bg-zinc-900/80 shadow-2xl">
           <div className="px-4 pt-4 pb-6 space-y-4">
             {session ? (
-                <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <Link 
-                    href="/profile" 
-                    className="flex items-center space-x-3 w-full px-4 py-3 text-textColor font-medium rounded-xl hover:bg-blue-50/50 dark:hover:bg-blue-500/10 transition-all duration-200"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <User className="w-5 h-5 shrink-0" />
-                    <span>{t("profile")}</span>
-                  </Link>
-                  <ThemeSwitcher text={true}/>
-                  <LocaleSwitcher text={true}/>
-                  <button
-                    onClick={() => {
-                      signOut();
-                      setMobileMenuOpen(false);
-                    }}
-                    className="flex items-center space-x-3 w-full px-4 py-3 text-textColor font-medium rounded-xl hover:bg-red-50 dark:hover:bg-red-500/10 transition-all duration-200 mt-2"
-                  >
-                    <LogOut className="w-5 h-5 shrink-0" />
-                    <span>{t("logout")}</span>
-                  </button>
-                </div>
+              <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                <Link
+                  href="/profile"
+                  className="flex items-center space-x-3 w-full px-4 py-3 text-textColor font-medium rounded-xl hover:bg-blue-50/50 dark:hover:bg-blue-500/10 transition-all duration-200"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <User className="w-5 h-5 shrink-0" />
+                  <span>{t("profile")}</span>
+                </Link>
+                <ThemeSwitcher text={true} />
+                <LocaleSwitcher text={true} />
+                <button
+                  onClick={() => {
+                    signOut();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="flex items-center space-x-3 w-full px-4 py-3 text-textColor font-medium rounded-xl hover:bg-red-50 dark:hover:bg-red-500/10 transition-all duration-200 mt-2"
+                >
+                  <LogOut className="w-5 h-5 shrink-0" />
+                  <span>{t("logout")}</span>
+                </button>
+              </div>
             ) : (
-            <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-              <ThemeSwitcher text={true}/>
-              <LocaleSwitcher text={true}/>
-              <button
-                onClick={() => {
-                  signIn();
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full mt-2 px-6 py-3 bg-linear-to-r from-blue-500 to-blue-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer"
-              >
-                {t("SignIn")}
-              </button>
-            </div>
+              <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                <ThemeSwitcher text={true} />
+                <LocaleSwitcher text={true} />
+                <button
+                  onClick={() => {
+                    signIn();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full mt-2 px-6 py-3 bg-linear-to-r from-blue-500 to-blue-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer"
+                >
+                  {t("SignIn")}
+                </button>
+              </div>
             )}
           </div>
         </div>
