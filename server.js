@@ -1,12 +1,12 @@
-const { createServer } = require('http');
-const { Server: IOServer } = require('socket.io');
-const Next = require('next');
-const { parse } = require('url');
-const { calculateQuizResult } = require('./utils/helpers'); // 👈 ADDED
+import { createServer } from 'http';
+import { Server as IOServer } from 'socket.io';
+import Next from 'next';
+import { parse } from 'url';
+import { calculateQuizResult } from './utils/helpers.js';
 
 const dev = process.env.NODE_ENV !== 'production';
-const hostname = '0.0.0.0'; // 👈 FIXED for Railway
-const port = process.env.PORT || 3000; // 👈 FIXED for Railway
+const hostname = '0.0.0.0';
+const port = process.env.PORT || 3000;
 const DOMAIN_URL = process.env.DOMAIN_URL || `http://${hostname}:${port}`;
 
 let io;
