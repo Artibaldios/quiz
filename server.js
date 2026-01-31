@@ -1,14 +1,15 @@
-import { createServer } from 'http';
-import { Server as IOServer } from 'socket.io';
-import Next from 'next';
-import { parse } from 'url';
+const { createServer } = require('http');
+const { Server: IOServer } = require('socket.io');
+const Next = require('next');
+const { parse } = require('url');
+const { calculateQuizResult } = require('./utils/helpers'); // 👈 ADDED
 
 const dev = process.env.NODE_ENV !== 'production';
-const hostname = 'localhost';
-const port = 3000;
-const DOMAIN_URL = process.env.NODE_ENV === 'production' 
-  ? process.env.DOMAIN_URL
-  : `http://${hostname}:${port}`;
+const hostname = '0.0.0.0'; // 👈 FIXED for Railway
+const port = process.env.PORT || 3000; // 👈 FIXED for Railway
+const DOMAIN_URL = process.env.DOMAIN_URL || `http://${hostname}:${port}`;
+
+let io;
 
 /**
  * @typedef {{id: string, name: string, isHost: boolean}} User
@@ -82,7 +83,7 @@ setInterval(cleanupStaleLobbies, 30000);
 const app = Next({ dev, hostname, port });
 const handle = app.getRequestHandler();
 
-let io;
+
 
 app.prepare().then(() => {
   const httpServer = createServer(async (req, res) => {
