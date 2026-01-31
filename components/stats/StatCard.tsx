@@ -10,7 +10,7 @@ interface StatCardProps {
   gradient?: boolean;
 }
 
-const StatCard = ({ title, value, suffix = "", icon: Icon, delay = 0, gradient = false }: StatCardProps) => {
+const StatCard = ({ title, value, suffix = "", icon: Icon, delay = 0 }: StatCardProps) => {
   const [displayValue, setDisplayValue] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 

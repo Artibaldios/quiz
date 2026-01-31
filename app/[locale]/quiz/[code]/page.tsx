@@ -1,11 +1,5 @@
-import Quiz from '@/components/Quiz';
+import Quiz2 from '@/components/Quiz/ClientQuiz';
 
-export default function QuizPage({
-  params,
-  searchParams
-}: {
-  params: { code: string; locale?: string };
-  searchParams: { quizId?: string };
-}) {
-  return <Quiz />;
+export default function QuizPage() {
+  return <Quiz2 />;
 }

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { User, Menu, X, User as UserIcon, LogOut } from "lucide-react";
+import { User, Menu, X, LogOut } from "lucide-react";
 import LocaleSwitcher from "./LocaleSwitcher";
 import ThemeSwitcher from "./ThemeSwitcher";
 import { useTranslations } from "next-intl";
@@ -59,7 +59,7 @@ export const NavMenu = () => {
 
                 {/* Profile Dropdown */}
                 {profileMenuOpen && (
-                  <div className="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-zinc-800 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl shadow-2xl py-2 animate-in slide-in-from-top-2 duration-200">
+                  <div className="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-zinc-900 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl shadow-2xl py-2 animate-in slide-in-from-top-2 duration-200">
                     <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
                       <p className="text-md font-bold text-gray-900 dark:text-white">
                         {session.user?.name || session.user?.email}
@@ -105,7 +105,7 @@ export const NavMenu = () => {
                   onClick={() => signIn()}
                   className="px-5 py-2.5 bg-linear-to-r from-blue-500 to-blue-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-200 cursor-pointer"
                 >
-                  Sign In
+                  {t("SignIn")}
                 </button>
               </div>
             )}

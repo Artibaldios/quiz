@@ -1,14 +1,31 @@
 "use client"
-import { Link } from '@/i18n/navigation';
-import type { RootState } from '../../../redux/store';
-import { useSelector } from 'react-redux';
-import { DynamicProgress } from '@/components/DynamicProgress';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useMemo } from "react";
+import { useRouter } from 'next/navigation';
+import { useQuizStore } from '@/stores/useQuizStore';
 
 export default function QuizResults() {
-  const quizResult = useSelector((state: RootState) => state.quiz.quizResult)
+  const { quizResult } = useQuizStore();
   const t = useTranslations("quizResultsPage");
+
+  const { topicScores, totalCorrect, totalQuestions } = useMemo(() => {
+    const topics = Object.entries(quizResult?.topicScores || {}).map(([topic, scores]) => ({
+      topic,
+      percentage: scores.total === 0 ? 0 : Math.round((scores.correct / scores.total) * 100),
+      correct: scores.correct,
+      total: scores.total,
+    }));
+
+    const totals = topics.reduce(
+      (acc, topic) => ({
+        totalCorrect: acc.totalCorrect + topic.correct,
+        totalQuestions: acc.totalQuestions + topic.total,
+      }),
+      { totalCorrect: 0, totalQuestions: 0 }
+    );
+
+    return { topicScores: topics, totalCorrect: totals.totalCorrect, totalQuestions: totals.totalQuestions };
+  }, [quizResult]);
 
   if (!quizResult) return (
     <div className='min-h-[400px] flex flex-col justify-center items-center'>
@@ -19,32 +36,10 @@ export default function QuizResults() {
     </div>
   )
 
-  const topicScores = useMemo(() => {
-    if (!quizResult) return [];
-    return Object.entries(quizResult.topicScores).map(([topic, scores]) => ({
-      topic,
-      percentage: scores.total === 0 ? 0 : Math.round((scores.correct / scores.total) * 100),
-      correct: scores.correct,
-      total: scores.total,
-    }));
-  }, [quizResult]);
-
-  const { totalCorrect, totalQuestions } = useMemo(() => {
-    return topicScores.reduce(
-      (acc, topic) => ({
-        totalCorrect: acc.totalCorrect + topic.correct,
-        totalQuestions: acc.totalQuestions + topic.total,
-      }),
-      { totalCorrect: 0, totalQuestions: 0 }
-    );
-  }, [topicScores]);
-
-
   return (
     <div className=" flex flex-col items-center justify-center mx-2">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-primary mb-4">{t("quizResults")}</h2>
-        <DynamicProgress targetValue={quizResult.score}/>
+        <h2 className="text-3xl font-bold text-primary mb-4 md:pt-4">{t("quizResults")}</h2>
         <p className="text-lg text-textColor">
           {t("youGot")} {totalCorrect} {t("outOf")} {" "} {totalQuestions} {t("correctQuestions")}
         </p>
@@ -80,7 +75,7 @@ export default function QuizResults() {
         <div className="space-y-4">
           {quizResult.questionsWithAnswers && quizResult.questionsWithAnswers.map((qa, index) => (
             <div
-              key={index}
+              key={`${qa.questionId}-${index}`}
               className={`border rounded-lg p-4 ${qa.user_answer === qa.correct_answer
                   ? "border-green-200 bg-green-50"
                   : "border-red-200 bg-red-50"
@@ -138,14 +133,16 @@ export default function QuizResults() {
 
 function BackToHomeButton({ className = "" }: { className?: string }) {
   const t = useTranslations("quizResultsPage");
+  const router = useRouter();
+  const locale = useLocale();
   return (
-    <div className={`text-center flex gap-4 justify-center items-center m-4 ${className}`}>
-      <Link
-        href="/"
-        className="w-full px-8 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-hover transition-colors shadow-sm hover:shadow"
-      >
-        <p>{t("BackToHome")}</p>
-      </Link>
+    <div className={`text-center flex gap-4 justify-center items-center ${className}`}>
+        <button
+          onClick={() => router.push(`/${locale}`)}
+          className="glass w-full px-4 sm:px-8 py-2.5 sm:py-3 dark:bg-linear-to-r dark:from-gray-400 dark:to-gray-500 dark:hover:from-gray-500 dark:hover:to-gray-600 text-textColor dark:text-white text-sm sm:text-base font-bold rounded-lg sm:rounded-xl shadow-xl min-h-11 flex items-center justify-center cursor-pointer"
+        >
+          {t("BackToHome")}
+        </button>
     </div>
   );
 }

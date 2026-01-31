@@ -15,6 +15,23 @@ export interface FetchedQuizData {
   }[]
 }
 
+export interface FetchedUserData {
+  threeLatestQuizzes: QuizResult[];
+  totalRightAnswers: number;
+  totalQuestions: number;
+  allUserQuizzes: QuizResult[];
+  perfectScoreCount: number;
+  uniqueQuizzesCount: number;
+}
+
+export interface QuizResult {
+  id: number;
+  quizId: number;
+  score: number;
+  createdAt: Date;
+  quizTitle: string;
+}
+
 export interface LobbySettings {
   questionTimer: number;
   resultTimer: number;
@@ -33,4 +50,34 @@ export interface LobbyData {
   hostId: string;
   users: User[];
   settings: LobbySettings;
+}
+
+export interface UserResult {
+  userId: string;
+  username: string;
+  answer: string;
+  isCorrect: boolean;
+  score: number;
+}
+
+
+export interface TotalScore {
+  userId: string;
+  name: string;
+  score: number;
+}
+
+export interface UserAnsweredData {
+  userId: string;
+  username: string;
+  questionIndex: number;
+  answer: string;
+  answeredUsers: number;
+  allAnswered: boolean;
+  allUsers: User[];
+  totalUsers: number;
+  score: number;
+  answerTime?: number;
+  isCorrect: boolean;
+  correctAnswer?: string;
 }

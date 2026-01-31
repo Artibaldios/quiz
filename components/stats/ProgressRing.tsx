@@ -8,16 +8,6 @@ interface ProgressRingProps {
 }
 
 const ProgressRing = ({ percentage, size = 200, strokeWidth = 12, label = "Accuracy" }: ProgressRingProps) => {
-    if(percentage == 0){
-        return (
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-5xl font-bold text-textColor">
-                    0%
-                </span>
-                <span className="text-sm text-textColor mt-1">{label}</span>
-            </div>
-        )
-    }
     const [animatedPercentage, setAnimatedPercentage] = useState(0);
 
     const radius = (size - strokeWidth) / 2;
@@ -47,6 +37,16 @@ const ProgressRing = ({ percentage, size = 200, strokeWidth = 12, label = "Accur
         return () => clearTimeout(timer);
     }, [percentage]);
 
+    if(percentage == 0){
+        return (
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-5xl font-bold text-textColor">
+                    0%
+                </span>
+                <span className="text-sm text-textColor mt-1">{label}</span>
+            </div>
+        )
+    }
     return (
         <div className={`relative glass backdrop-blur-xl
         rounded-3xl p-4 md:p-6

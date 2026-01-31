@@ -1,11 +1,5 @@
-import QuizLobby from '@/components/QuizLobby';
+import QuizLobby from '@/components/Lobby/QuizLobby';
 
-export default function LobbyPage({
-  params,
-  searchParams
-}: {
-  params: { code: string; locale?: string };
-  searchParams: { quizId?: string };
-}) {
-  return <QuizLobby />;
+export default function LobbyPage() {
+  return <QuizLobby/>;
 }

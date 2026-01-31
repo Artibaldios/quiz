@@ -67,10 +67,10 @@ export default function LobbyInput() {
   };
 
   return (
-    <div className={`m-4 md:p-8`}>
+    <div className={`m-1 mb-4 md:p-8`}>
       <div className="relative max-w-md mx-auto">
         {/* Glassmorphism Container */}
-        <div className="glass p-8 rounded-3xl shadow-2xl border border-white/20 backdrop-blur-xl bg-white/10">
+        <div className="glass p-8 rounded-3xl shadow-lg border border-white/20 backdrop-blur-xl bg-white/10">
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-textColor mb-2">
               {t("joinLobby")}

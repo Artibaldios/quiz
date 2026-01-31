@@ -31,6 +31,8 @@
     "answeredUsers": "ответили",
     "player": "Игрок",
     "score": "Счет",
+    "pause": "Пауза",
+    "resume": "Продолжить",
     "finalResults": "Финальный Счет",
     "notFound": "не найдено"
   },
@@ -79,7 +81,14 @@
     "questions": "Вопросы",
     "total": "Всего сыграно",
     "created": "Создано",
-    "topic": "Темы"
+    "topic": "Темы",
+    "startButton": "Начать Квиз",
+    "joined": "вошли",
+    "host": "Хост",
+    "hostWillStart": "Хост начнет квиз",
+    "waiting": "Ждем остальных игроков...",
+    "signIn": "Войти",
+    "needSignIn": "Для участия в квизе зарегистрируйся"
   },
   "navMenu": {
     "profile": "Профиль",
@@ -91,5 +100,21 @@
   },
   "LocaleSwitcher": {
     "locale": "Язык: Русский"
+  },
+    "login":{
+    "login": "Вход",
+    "register": "Регистрация",
+    "username": "Имя пользователя",
+    "password": "Пароль",
+    "email": "Email",
+    "enterUsername": "введите имя",
+    "enterPassword": "введите пароль",
+    "loading": "Загрзука...",
+    "signIn": "Войти",
+    "failUserCreate": "Не удалось создать пользователя",
+    "chooseUser": "Выберите имя пользователя",
+    "enterEmail": "Введите email",
+    "createPassword": "Создайте пароль",
+    "createAccount": "Зарегистрироваться"
   }
 }

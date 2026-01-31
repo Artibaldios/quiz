@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useState, useEffect, useRef, ChangeEvent } from "react";
 import QuizCard from "./QuizCard";
-import { QuizCardSkeleton } from "./QuizCardSkeleton";
+import { QuizCardSkeleton } from "../QuizCardSkeleton";
 import { type QuizCardProps } from '@/utils/helpers';
 import Loader from '@/components/Loader'
 
@@ -228,7 +228,7 @@ function QuizCarousel({ title, quizzes, carouselRef, scrollCarousel, initialLoad
       <div className="relative">
         <div
           ref={carouselRef}
-          className="flex overflow-x-auto gap-6 p-2 md:py-6 scrollbar-hide scroll-smooth"
+          className="flex  overflow-x-auto overflow-y-hidden gap-6 p-2 md:py-6 scrollbar-hide scroll-smooth"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {initialLoading ? (

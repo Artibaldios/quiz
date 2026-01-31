@@ -32,6 +32,8 @@
     "player": "Player",
     "score": "Score",
     "finalResults": "Final Results",
+    "pause": "Pause",
+    "resume": "Resume",
     "notFound": "No Data found"
   },
   "quizResultsPage": {
@@ -79,7 +81,14 @@
     "questions": "Questions",
     "total": "Total Plays",
     "created": "Created",
-    "topic": "Topics"
+    "topic": "Topics",
+    "startButton": "Start Quiz",
+    "joined": "joined",
+    "host": "Host",
+    "hostWillStart": "Host will start the game",
+    "waiting": "Waiting other players...",
+    "signIn": "Sign In",
+    "needSignIn": "Sign in to play quizzes"
   },
   "navMenu": {
     "profile": "Profile",
@@ -91,5 +100,21 @@
   },
   "LocaleSwitcher": {
     "locale": "Language: English"
+  },
+  "login":{
+    "login": "Login",
+    "register": "Register",
+    "username": "Username",
+    "password": "Password",
+    "email": "Email",
+    "enterUsername": "Enter your username",
+    "enterPassword": "Enter your password",
+    "loading": "Loading...",
+    "signIn": "Sign In",
+    "failUserCreate": "Failed to create user",
+    "chooseUser": "Choose a username",
+    "enterEmail": "Enter your email",
+    "createPassword": "Create a password",
+    "createAccount": "Create Account"
   }
 }

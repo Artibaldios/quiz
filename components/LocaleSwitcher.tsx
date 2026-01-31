@@ -11,6 +11,11 @@ export default function LocaleSwitcher({ text }: { text: boolean }) {
 
   function toggleLocale() {
     const newLocale = locale === "ru" ? "en" : "ru";
+        // ✅ Check if path includes "lobby" - redirect to root
+    if (pathname.includes("lobby")) {
+      router.push(`/${newLocale}`);
+      return;
+    }
     const newPath = pathname.replace(/^\/(en|ru)/, `/${newLocale}`);
     router.push(newPath);
   }
@@ -21,7 +26,7 @@ export default function LocaleSwitcher({ text }: { text: boolean }) {
       onClick={toggleLocale}
       aria-label={t("locale")}
     >
-      <Globe className="w-5 h-5 text-gray-500 group-hover:text-blue-500" />
+      <Globe className="w-5 h-5 text-gray-500 group-hover:text-primary" />
       {text ? <span className="font-medium text-gray-900 dark:text-white">{t("locale", { locale })}</span> : null}
     </button>
   );

@@ -1,6 +1,7 @@
 import Provider from '../provider';
 import { NavMenu } from '@/components/NavMenu';
 import Footer from '@/components/Footer';
+import SocketManager from '@/lib/socket';
 
 export default async function LocaleLayout({
   children,
@@ -18,6 +19,7 @@ export default async function LocaleLayout({
         {children}
       </main>
       <Footer />
+      <SocketManager />
     </Provider>
   );
 }

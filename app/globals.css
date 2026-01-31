@@ -15,6 +15,10 @@
   --glass-bg: 0 0% 100% / 0.25;
   --glass-border: 0 0% 100% / 0.4;
   --glass-blur: 20px;
+  --color-gradient-background: linear-gradient(180deg, hsl(222 47% 14%), hsl(222 47% 8%));
+  --gradient-primary: linear-gradient(135deg, hsl(217 97% 54%), hsl(217 97% 44%));
+  --gradient-glass: linear-gradient(135deg, hsl(var(--glass-highlight)), transparent);
+  --gradient-background: linear-gradient(180deg, hsl(222 47% 14%), hsl(222 47% 8%));
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -29,7 +33,10 @@
 
 @layer base {
   body {
-    @apply bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 dark:from-slate-900 dark:via-blue-950/80 dark:to-slate-900;
+    @apply bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20;
+  }
+  .dark body {
+    background: var(--gradient-background);
   }
 }
 
@@ -39,6 +46,17 @@
     @apply backdrop-blur-xl;
     background: hsl(var(--glass-bg));
     border: 1px solid hsl(var(--glass-border));
+  }
+
+  .dark .glass {
+    @apply backdrop-blur-xl;
+    border: 1px solid transparent;
+    background: linear-gradient(hsl(222 47% 12%), hsl(222 47% 12%)) padding-box,
+                linear-gradient(135deg, hsl(217 97% 54% / 0.6), transparent, hsl(217 97% 54% / 0.6)) border-box;
+  }
+  .dark .glass-border {
+    @apply backdrop-blur-xl;
+    border: 1px solid hsl(217 97% 54% / 0.6);
   }
 
   .animate-float-slow {

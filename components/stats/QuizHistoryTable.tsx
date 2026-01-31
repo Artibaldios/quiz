@@ -1,14 +1,7 @@
 import { useState } from 'react';
 import { Trophy, TrendingUp, Clock, ChevronLeft, ChevronRight } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
-
-interface QuizResult {
-  id: number;
-  quizId: number;
-  score: number;
-  createdAt: string;
-  quizTitle: string;
-}
+import { useTranslations } from "next-intl";
+import { QuizResult } from '@/types/quiz';
 
 interface QuizHistoryTableProps {
   quizzes: QuizResult[];

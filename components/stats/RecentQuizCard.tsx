@@ -1,19 +1,12 @@
-import { Trophy, Calendar, Clock } from "lucide-react";
-
-interface Quiz {
-  id: number;
-  quizId: number;
-  quizTitle: string;
-  score: number;
-  createdAt: string;
-}
+import { QuizResult } from "@/types/quiz";
+import { Trophy, Calendar } from "lucide-react";
 
 interface RecentQuizCardProps {
-  quiz: Quiz;
+  quiz: QuizResult;
   index: number;
 }
 
-const RecentQuizCard = ({ quiz, index }: RecentQuizCardProps) => {
+const RecentQuizCard = ({ quiz }: RecentQuizCardProps) => {
 
   const getScoreColor = (score: number) => {
     if (score === 100) return "text-emerald-900 dark:text-emerald-300";

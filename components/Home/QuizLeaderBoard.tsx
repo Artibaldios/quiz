@@ -88,7 +88,7 @@ const QuizLeaderboard: React.FC = () => {
   }
 
   return (
-    <div className="m-2 mx-auto glass rounded-3xl shadow-sm border border-white/20 dark:border-zinc-700/50 overflow-hidden md:min-w-3/4">
+    <div className="w-full m-2 mx-auto glass rounded-3xl shadow-sm border border-white/20 dark:border-zinc-700/50 overflow-hidden md:min-w-3/4 md:w-3/4">
       {/* Header with Gradient */}
       <div className="p-2 sm:px-6 sm:py-8 border-b border-gray-300 dark:border-white/30">
         <div className="flex items-center justify-between mb-6">
@@ -137,10 +137,10 @@ const QuizLeaderboard: React.FC = () => {
       {/* Top 3 Podium */}
       {dataToShow.length > 0 && (
         <div className="p-2 sm:px-6 sm:py-8">
-          <div className="flex items-end justify-center space-x-4 mb-6">
+          <div className="flex items-end justify-center space-x-4 mb-2 md:mb-6">
             {/* Second Place */}
             {dataToShow[1] && (
-              <div className="flex flex-col items-center flex-1 max-w-[120px]">
+              <div className="flex flex-col items-center">
                 <div className="w-15 h-15 sm:w-20 sm:h-20 bg-linear-to-b from-gray-300 to-gray-200 rounded-full border-4 border-white shadow-lg flex items-center justify-center mb-3 relative">
                   <div className="absolute -top-2 -right-2 w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center text-white font-bold text-sm">
                     2
@@ -165,7 +165,7 @@ const QuizLeaderboard: React.FC = () => {
 
             {/* First Place */}
             {dataToShow[0] && (
-              <div className="flex flex-col items-center flex-1 max-w-[140px]">
+              <div className="flex flex-col items-center">
                 <div className="w-18 h-18 sm:w-24 sm:h-24 bg-linear-to-b from-yellow-400 to-yellow-300 rounded-full border-4 border-white shadow-lg flex items-center justify-center mb-3 relative">
                   <div className="absolute -top-2 -right-2 w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
                     <Trophy className="w-4 h-4" />
@@ -190,7 +190,7 @@ const QuizLeaderboard: React.FC = () => {
 
             {/* Third Place */}
             {dataToShow[2] && (
-              <div className="flex flex-col items-center flex-1 max-w-[120px]">
+              <div className="flex flex-col items-center">
                 <div className="w-15 h-15 sm:w-20 sm:h-20 bg-linear-to-b from-amber-600 to-amber-500 rounded-full border-4 border-white shadow-lg flex items-center justify-center mb-3 relative">
                   <div className="absolute -top-2 -right-2 w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
                     3

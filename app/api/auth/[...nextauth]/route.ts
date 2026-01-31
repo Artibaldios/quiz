@@ -7,7 +7,7 @@ import type { SessionStrategy } from "next-auth"
 import { DefaultSession } from "next-auth";
 import { JWT } from "next-auth/jwt";
 
-const authOptions = {
+export const authOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
@@ -73,7 +73,7 @@ const authOptions = {
     },
   },
   pages: {
-    signIn: "/en/login",
+    signIn: `/en/login`,
   },
   secret: process.env.NEXTAUTH_SECRET,
 };

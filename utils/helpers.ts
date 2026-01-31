@@ -1,3 +1,5 @@
+import { FetchedUserData } from "@/types/quiz";
+
 export interface Question {
   id: string | number;
   question_text: string;
@@ -12,14 +14,18 @@ export interface QuestionWithAnswer {
   correct_answer: string;
   topic: string;
   user_answer: string;
+  questionId: string | number;
+  givenAnswer: string;
+  isCorrect: boolean;
 }
 
-export interface QuizResult {
+export interface QuizResultsProps {
   score: number;
+  percentScore: number;
   totalCorrect: number;
   totalQuestions: number;
   topicScores: Record<string, { correct: number; total: number }>;
-  questionsWithAnswers?: QuestionWithAnswer[];
+  questionsWithAnswers: QuestionWithAnswer[];
 }
 
 export interface QuizCardProps {
@@ -33,7 +39,7 @@ export interface QuizCardProps {
 }
 
 // Pure function to calculate quiz results locally
-export function calculateQuizResult(questions: Question[], answers: string[]): QuizResult {
+export function calculateQuizResult(questions: Question[], answers: string[], points: number): QuizResultsProps {
   let totalCorrect = 0;
   const topicScores: Record<string, { correct: number; total: number }> = {};
 
@@ -54,10 +60,11 @@ export function calculateQuizResult(questions: Question[], answers: string[]): Q
     }
   }
 
-  const score = Math.round((totalCorrect / questions.length) * 100);
+  const percentScore = Math.round((totalCorrect / questions.length) * 100);
 
   return {
-    score,
+    score: points,
+    percentScore,
     totalCorrect,
     totalQuestions: questions.length,
     topicScores,
@@ -67,6 +74,9 @@ export function calculateQuizResult(questions: Question[], answers: string[]): Q
       correct_answer: question?.correct_answer || "",
       user_answer: answers[index] || "",
       topic: question?.topic || "",
+      questionId: question?.id,
+      givenAnswer: answers[index],
+      isCorrect: answers[index] == question?.correct_answer
     })),
   };
 }
@@ -175,3 +185,9 @@ export async function submitQuizResults(userId: string, quizId: number, score: n
   }
   return response.json();
 }
+
+export const fetchUserQuizStats = async (userId: string, locale: string): Promise<FetchedUserData> => {
+  const res = await fetch(`/api/user/${userId}/quiz-stats?lang=${locale}`);
+  if (!res.ok) throw new Error("Failed to fetch stats");
+  return res.json();
+};

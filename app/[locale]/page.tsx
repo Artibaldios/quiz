@@ -1,7 +1,7 @@
 "use client"
-import QuizLeaderboard from '@/components/QuizLeaderBoard';
-import QuizSearch from '@/components/QuizSearch';
-import LobbyInput from '@/components/Lobbyinput';
+import QuizLeaderboard from '@/components/Home/QuizLeaderBoard';
+import QuizSearch from '@/components/Home/QuizSearch';
+import LobbyInput from '@/components/Home/Lobbyinput';
 
 import { useTranslations } from 'next-intl';
 

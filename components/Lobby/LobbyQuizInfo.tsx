@@ -22,7 +22,7 @@ const QuizInfo = ({ quiz }: QuizInfoProps) => {
   };
 
   return (
-    <div className="glass p-4 animate-fade-in rounded-2xl sm:p-4 md:p-6" style={{ animationDelay: "0.1s" }} >
+    <div className="glass glass-border p-4 animate-fade-in rounded-2xl sm:p-4 md:p-6" style={{ animationDelay: "0.1s" }} >
       <div className="flex flex-col items-start justify-start">
         <div className="flex">
           <span className=" px-3 py-1 text-xs font-semibold rounded-full bg-primary/10 text-primary m-1">
@@ -38,31 +38,31 @@ const QuizInfo = ({ quiz }: QuizInfoProps) => {
             </span>
           )}
         </div>
-        <h1 className="text-2xl font-bold text-foreground mb-2 mx-1">{quiz.title}</h1>
+        <h1 className="text-2xl font-bold text-textColor mb-2 mx-1">{quiz.title}</h1>
       </div>
 
       <div className="grid grid-cols-3 gap-2 sm:gap-4">
         <div className="glass p-4 rounded-xl text-center">
           <HelpCircle className="w-5 h-5 mx-auto mb-2 text-primary" />
-          <p className="text-2xl font-bold text-foreground">{quiz.questionCount}</p>
-          <p className="text-xs text-muted-foreground">{t("questions")}</p>
+          <p className="text-2xl font-bold text-textColor">{quiz.questionCount}</p>
+          <p className="text-xs text-textColor">{t("questions")}</p>
         </div>
         <div className="glass p-4 rounded-xl text-center">
-          <Trophy className="w-5 h-5 mx-auto mb-2 text-accent" />
-          <p className="text-2xl font-bold text-foreground">{quiz.plays.toLocaleString()}</p>
-          <p className="text-xs text-muted-foreground">{t("total")}</p>
+          <Trophy className="w-5 h-5 mx-auto mb-2 text-textColor" />
+          <p className="text-2xl font-bold text-textColor">{quiz.plays.toLocaleString()}</p>
+          <p className="text-xs text-textColor">{t("total")}</p>
         </div>
         <div className="glass p-4 rounded-xl text-center">
-          <Clock className="w-5 h-5 mx-auto mb-2 text-muted-foreground" />
-          <p className="text-2xl font-bold text-foreground">
+          <Clock className="w-5 h-5 mx-auto mb-2 text-textColor" />
+          <p className="text-2xl font-bold text-textColor">
             {new Date(quiz.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
           </p>
-          <p className="text-xs text-muted-foreground">{t("created")}</p>
+          <p className="text-xs text-textColor">{t("created")}</p>
         </div>
       </div>
 
-      <div className="mt-6 pt-4 border-t border-border/50">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+      <div className="mt-6 pt-4">
+        <div className="flex items-center gap-2 text-sm text-textColor">
           <BookOpen className="w-4 h-4" />
           <span>
             {t("topic")}: {[...new Set(quiz.questions.map((q) => q.topic))].slice(0, 4).join(", ")}

@@ -31,17 +31,13 @@ const QuizCard: React.FC<QuizCardProps> = ({
   return (
     <div className="group relative">
       {/* Animated background gradient */}
-      <div className="absolute inset-0 bg-linear-to-br from-primary/30 via-purple-500/20 to-pink-500/30 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="absolute inset-0 bg-linear-to-br from-primary/30 via-purple-500/20 to-pink-500/30 rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
       <div className={`
         relative glass rounded-2xl p-4 md:p-6 border border-white/20
         transform transition-all duration-500 ease-out
         hover:border-white/40 hover:shadow-md`
       }>
-        {/* Floating orbs */}
-        <div className="absolute -top-3 -right-3 w-10 h-10 bg-linear-to-br from-primary/40 to-purple-500/40 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-float" />
-        <div className="absolute -bottom-3 -left-3 w-8 h-8 bg-linear-to-br from-pink-500/40 to-orange-500/40 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-float" style={{ animationDelay: "0.5s" }} />
-
         <h3 className="text-lg font-semibold text-textColor mb-4 line-clamp-1">{title}</h3>
 
         <div className="flex items-center gap-3 mb-4">

@@ -1,5 +1,6 @@
 "use client";
 import { signIn, useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 
@@ -27,6 +28,7 @@ interface RegisterFormData {
 const LoginFormFields = ({ onSuccess, setError }: LoginFormProps) => {
   const [form, setForm] = useState<LoginFormData>({ username: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const t = useTranslations("login");
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -55,7 +57,7 @@ const LoginFormFields = ({ onSuccess, setError }: LoginFormProps) => {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
         <label htmlFor="login-username" className="block text-sm font-medium text-textColor mb-2">
-          Username
+          {t("username")}
         </label>
         <input
           id="login-username"
@@ -65,14 +67,14 @@ const LoginFormFields = ({ onSuccess, setError }: LoginFormProps) => {
           value={form.username}
           onChange={handleChange}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg text-textColor focus:ring-2 focus:ring-blue-500 focus:border-transparent transition outline-none placeholder-textColor placeholder-opacity-50"
-          placeholder="Enter your username"
+          placeholder= {t("enterUsername")}
           autoComplete="on"
         />
       </div>
 
       <div>
         <label htmlFor="login-password" className="block text-sm font-medium text-textColor mb-2">
-          Password
+          {t("password")}
         </label>
         <input
           id="login-password"
@@ -82,7 +84,7 @@ const LoginFormFields = ({ onSuccess, setError }: LoginFormProps) => {
           value={form.password}
           onChange={handleChange}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg text-textColor focus:ring-2 focus:ring-blue-500 focus:border-transparent transition outline-none placeholder-textColor placeholder-opacity-50"
-          placeholder="Enter your password"
+          placeholder= {t("enterPassword")}
           autoComplete="on"
         />
       </div>
@@ -92,7 +94,7 @@ const LoginFormFields = ({ onSuccess, setError }: LoginFormProps) => {
         disabled={loading}
         className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition transform hover:scale-105 focus:scale-105 font-semibold shadow-lg cursor-pointer"
       >
-        {loading ? "Loading..." : "Sign In"}
+        {loading ? t("loading") : t("signIn") }
       </button>
     </form>
   );
@@ -101,7 +103,7 @@ const LoginFormFields = ({ onSuccess, setError }: LoginFormProps) => {
 const RegisterFormFields = ({ onSuccess, setError }: RegisterFormProps) => {
   const [form, setForm] = useState<RegisterFormData>({ username: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
-
+  const t = useTranslations("login");
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }, []);
@@ -110,6 +112,20 @@ const RegisterFormFields = ({ onSuccess, setError }: RegisterFormProps) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+
+    // Simple validation
+    if (form.password.length < 5) {
+      setError("Password must be more than 4 characters");
+      setLoading(false);
+      return;
+    }
+
+    // Optional: username check too
+    if (form.username.length < 3) {
+      setError("Username must be at least 3 characters");
+      setLoading(false);
+      return;
+    }
 
     try {
       const response = await fetch("/api/auth/register", {
@@ -133,7 +149,7 @@ const RegisterFormFields = ({ onSuccess, setError }: RegisterFormProps) => {
         }
       } else {
         const data = await response.json();
-        setError(data.message || "Failed to create user");
+        setError(data.message || t("failUserCreate"));
       }
     } catch (error) {
       setLoading(false);
@@ -145,7 +161,7 @@ const RegisterFormFields = ({ onSuccess, setError }: RegisterFormProps) => {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
         <label htmlFor="register-username" className="block text-sm font-medium text-textColor mb-2">
-          Username
+          {t("username")}
         </label>
         <input
           id="register-username"
@@ -155,14 +171,14 @@ const RegisterFormFields = ({ onSuccess, setError }: RegisterFormProps) => {
           value={form.username}
           onChange={handleChange}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg text-textColor focus:ring-2 focus:ring-blue-500 focus:border-transparent transition outline-none placeholder-textColor"
-          placeholder="Choose a username"
+          placeholder={t("chooseUser")}
           autoComplete="on"
         />
       </div>
 
       <div>
         <label htmlFor="register-email" className="block text-sm font-medium text-textColor mb-2">
-          Email
+          {t("email")}
         </label>
         <input
           id="register-email"
@@ -172,14 +188,14 @@ const RegisterFormFields = ({ onSuccess, setError }: RegisterFormProps) => {
           value={form.email}
           onChange={handleChange}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg text-textColor focus:ring-2 focus:ring-blue-500 focus:border-transparent transition outline-none placeholder-textColor"
-          placeholder="Enter your email"
+          placeholder={t("enterEmail")}
           autoComplete="on"
         />
       </div>
 
       <div>
         <label htmlFor="register-password" className="block text-sm font-medium text-textColor mb-2">
-          Password
+          {t("password")}
         </label>
         <input
           id="register-password"
@@ -189,7 +205,7 @@ const RegisterFormFields = ({ onSuccess, setError }: RegisterFormProps) => {
           value={form.password}
           onChange={handleChange}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg text-textColor focus:ring-2 focus:ring-blue-500 focus:border-transparent transition outline-none placeholder-textColor"
-          placeholder="Create a password"
+          placeholder={t("createPassword")}
           autoComplete="off"
         />
       </div>
@@ -199,13 +215,14 @@ const RegisterFormFields = ({ onSuccess, setError }: RegisterFormProps) => {
         disabled={loading}
         className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition transform hover:scale-105 focus:scale-105 font-semibold shadow-lg cursor-pointer"
       >
-        {loading ? "Loading..." : "Create Account"}
+        {loading ? t("loading") : t("createAccount")}
       </button>
     </form>
   );
 };
 
 export const LoginForm = () => {
+  const t = useTranslations("login");
   const router = useRouter();
   const { data: session, status } = useSession();
   const [isLogin, setIsLogin] = useState(true);
@@ -239,7 +256,7 @@ export const LoginForm = () => {
                 : "text-gray-600 hover:text-gray-800"
             }`}
           >
-            Login
+            {t("login")}
           </button>
           <button
             onClick={handleRegisterToggle}
@@ -249,7 +266,7 @@ export const LoginForm = () => {
                 : "text-gray-600 hover:text-gray-800"
             }`}
           >
-            Register
+            {t("register")}
           </button>
         </div>
       </div>

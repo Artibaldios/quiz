@@ -18,10 +18,10 @@ const LobbyHeader = ({ lobbyCode }: LobbyHeaderProps) => {
   };
 
   return (
-    <div className="glass p-4 flex items-center justify-between rounded-2xl md:p-6">
+    <div className="glass glass-border p-4 flex items-center justify-between rounded-2xl md:p-6">
       {/* <div className="flex items-center -betweejustifyn"> */}
       <div>
-        <p className="text-sm text-foreground font-bold sm:text-2xl sm:font-extrabold">{t("code")}</p>
+        <p className="text-sm text-textColor font-bold sm:text-2xl sm:font-extrabold">{t("code")}</p>
       </div>
       <div className="flex items-center  gap-3">
         <span className="text-4xl font-bold tracking-widest gradient-text">
@@ -35,13 +35,13 @@ const LobbyHeader = ({ lobbyCode }: LobbyHeaderProps) => {
           {copied ? (
             <Check className="w-5 h-5 text-blue-500" />
           ) : (
-            <Copy className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+            <Copy className="w-5 h-5 text-textColor group-hover:text-primary transition-colors" />
           )}
         </button>
       </div>
       {/* </div> */}
       {/* <div className="text-right hidden sm:block">
-        <p className="text-sm text-muted-foreground">Share this code with friends</p>
+        <p className="text-sm text-muted-textColor">Share this code with friends</p>
       </div> */}
     </div>
   );

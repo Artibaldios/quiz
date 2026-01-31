@@ -2,17 +2,20 @@ import { createServer } from 'http';
 import { Server as IOServer } from 'socket.io';
 import Next from 'next';
 import { parse } from 'url';
-import type { User } from './types/quiz'; // Adjust path to your types
+import type { FetchedQuizData, User } from './types/quiz'; // Adjust path to your types
+import { calculateQuizResult, QuizResultsProps } from './utils/helpers';
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = 'localhost';
 const port = 3000;
-
+const DOMAIN_URL = process.env.NODE_ENV === 'production' 
+  ? process.env.DOMAIN_URL
+  : `http://${hostname}:${port}`;
 // Lobbies state management
 const lobbies: Map<string, User[]> = new Map();
 const socketUserMap = new Map<string, { userId: string, lobbyCode: string }>();
 const lobbyHosts = new Map<string, string>();
-const lobbyUserAnswers = new Map<string, Map<number, Map<string, string>>>();
+const lobbyUserAnswers = new Map<string, Map<number, Map<string, {answer: string, answerTime: number, score: number, isCorrect: boolean}>>>();
 const lobbyQuestionIndex = new Map<string, number>();
 const lobbyTimers = new Map<string, {
   isRunning: boolean;
@@ -22,6 +25,7 @@ const lobbyTimers = new Map<string, {
   totalPausedTime: number;
   pauseStartTime: number | null;
 }>();
+const lobbyQuizData = new Map<string, FetchedQuizData>();
 const getLobbyUsers = (lobbyCode: string): User[] => {
   return lobbies.get(lobbyCode) || [];
 };
@@ -42,8 +46,6 @@ const removeUserFromLobby = (lobbyCode: string, userId: string): void => {
 };
 
 function cleanupStaleLobbies() {
-  const now = Date.now();
-
   lobbies.forEach((users, lobbyCode) => {
     // Delete if:
     // 1. Empty lobby (no users)
@@ -105,7 +107,6 @@ app.prepare().then(() => {
       // Auto-reset if lobby stale/empty
       let currentUsers = lobbies.get(lobbyCode) || [];
       if (currentUsers.length === 0) {
-        console.log(`🔄 Resetting empty lobby ${lobbyCode}`);
         lobbies.delete(lobbyCode);
         lobbyHosts.delete(lobbyCode);
         currentUsers = [];
@@ -130,9 +131,11 @@ app.prepare().then(() => {
     });
 
 
-    socket.on('start-quiz', ({ lobbyCode, settings }) => {
-      console.log(`🚀 Host starting quiz in ${lobbyCode}`, settings);
+    socket.on('start-quiz', ({ lobbyCode, quizData, settings, quizId}) => {
+      lobbyQuizData.set(lobbyCode, quizData);
       lobbyUserAnswers.delete(lobbyCode);
+      lobbyQuestionIndex.set(lobbyCode, 0);
+
       const allUsers = getLobbyUsers(lobbyCode);
       const totalUsers = allUsers.length;
       const hostId = lobbyHosts.get(lobbyCode);
@@ -165,7 +168,7 @@ app.prepare().then(() => {
       });
 
       // Keep existing broadcast
-      io.to(lobbyCode).emit('quiz-started', { lobbyCode, totalUsers });
+      io.to(lobbyCode).emit('quiz-started', { lobbyCode, totalUsers, hostId, settings, quizId });
     });
 
     socket.on('user-answer-submitted', ({ lobbyCode, questionIndex, answer, userId, username, answerTime }) => {
@@ -177,34 +180,42 @@ app.prepare().then(() => {
       }
 
       const questionAnswers = lobbyUserAnswers.get(lobbyCode)!.get(questionIndex)!;
-      questionAnswers.set(userId, answer);
+      
+      // ✅ Store FULL answer data with pre-calculated score
+      const timer = lobbyTimers.get(lobbyCode);
+      let score = 0;
+      let isCorrect = false;
+
+      const quizData = lobbyQuizData.get(lobbyCode);
+      if (quizData && quizData.questions[questionIndex]) {
+        const correctAnswer = quizData.questions[questionIndex].correct_answer;
+        isCorrect = answer.trim().toLowerCase() === correctAnswer.trim().toLowerCase();
+        
+        if (isCorrect && timer && answerTime !== undefined) {
+          const maxTimeSeconds = timer.duration;
+          const timeLeftSeconds = answerTime;
+          const randomBonus = Math.floor(Math.random() * 11);
+          const baseScore = Math.floor(1000 * (timeLeftSeconds / maxTimeSeconds));
+          score = baseScore + randomBonus;
+          score = Math.max(0, Math.min(1000, score));
+        }
+      }
+
+      // ✅ Store complete answer data
+      questionAnswers.set(userId, { answer, answerTime, score, isCorrect });
 
       const answeredUsers = questionAnswers.size;
-
       const allUsers = getLobbyUsers(lobbyCode);
       const totalUsers = allUsers.length;
       const allAnswered = answeredUsers === totalUsers;
 
-      const timer = lobbyTimers.get(lobbyCode);
-      let score = 0;
-
-      // ✅ FIXED: Calculate time elapsed correctly
-      if (timer && answerTime !== undefined) {
-        const maxTime = timer.duration * 1000; // Convert to milliseconds
-        const timeUsed = answerTime; // This should be milliseconds elapsed
-        const timeRemaining = Math.max(0, maxTime - timeUsed);
-
-        // Score based on how quickly they answered (more time left = higher score)
-        score = Math.floor(1000 * (timeRemaining / maxTime));
-      }
-
-      console.log("Score calculated:", score, "answerTime:", answerTime);
-
       io.to(lobbyCode).emit('user-answered', {
         userId, questionIndex, answer, answeredUsers, allAnswered, username,
-        allUsers, totalUsers, score, answerTime
+        allUsers, totalUsers, score, answerTime, isCorrect,
+        correctAnswer: quizData?.questions[questionIndex]?.correct_answer || null
       });
     });
+
 
     socket.on('pause-timer', ({ lobbyCode }) => {
       const timer = lobbyTimers.get(lobbyCode);
@@ -227,7 +238,7 @@ app.prepare().then(() => {
         timer.isRunning = true;
 
         io.to(lobbyCode).emit('timer-resumed', {
-          timeLeft: timer.timeLeft,  // 👈 SAME timeLeft!
+          timeLeft: timer.timeLeft,
           totalPausedTime: timer.totalPausedTime
         });
       }
@@ -237,7 +248,7 @@ app.prepare().then(() => {
       const now = Date.now();
       lobbyTimers.set(lobbyCode, {
         isRunning: true,
-        timeLeft: duration,  // ✅ START VALUE
+        timeLeft: duration,
         startTime: now,
         duration,
         totalPausedTime: 0,
@@ -274,8 +285,6 @@ app.prepare().then(() => {
         isRunning: true,
         duration: NEW_QUESTION_DURATION
       });
-
-      console.log(`➡️ ${lobbyCode}: Advanced to Q${nextIndex}, timer reset to ${NEW_QUESTION_DURATION}s`);
     });
 
     socket.on('get-lobby-history', ({ lobbyCode }) => {
@@ -288,50 +297,83 @@ app.prepare().then(() => {
     });
 
     socket.on('finish-quiz', ({ lobbyCode }) => {
-      console.log(`🏁 ${lobbyCode}: Quiz finished by host`);
-
-      // Calculate FINAL scores for all users
       const allUsers = getLobbyUsers(lobbyCode);
-      const finalScores: Record<string, { name: string, score: number }> = {};
-
       const allAnswers = lobbyUserAnswers.get(lobbyCode);
-      if (allAnswers) {
-        allAnswers.forEach((questionAnswers, questionIndex) => {
-          questionAnswers.forEach((answer, userId) => {
-            // You'd need correct answers from quiz data - for now mock scoring
-            const score = Math.floor(Math.random() * 1000); // Replace with real logic
-            if (!finalScores[userId]) {
-              const user = allUsers.find(u => u.id === userId);
-              finalScores[userId] = { name: user?.name || userId, score: 0 };
-            }
-            finalScores[userId].score += score;
+      const quizData = lobbyQuizData.get(lobbyCode);
+
+      if (allAnswers && quizData && quizData.questions) {
+        const userDetailedResults: Record<string, QuizResultsProps> = {};
+
+        allUsers.forEach(user => {
+          // Extract user's answers for each question in order
+          const userAnswers: string[] = [];
+          let userPoints: number = 0;
+          quizData.questions.forEach((question, questionIndex) => {
+            const userAnswerData = allAnswers.get(questionIndex)?.get(user.id);
+            userAnswers[questionIndex] = userAnswerData?.answer || '';
+            userPoints += userAnswerData?.score || 0;
           });
+
+          // Use YOUR exact calculation logic
+          const quizResult = calculateQuizResult(quizData.questions, userAnswers, userPoints);
+          userDetailedResults[user.id] = quizResult;
+          // send results to prisma
+          fetch(`${DOMAIN_URL}/api/quiz/results`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId: user.id,
+              quizId: quizData.id,
+              score: quizResult.percentScore,
+              answers: quizResult.questionsWithAnswers,
+            }),
+          });
+        });
+
+        // Send detailed results to each user
+        Object.entries(userDetailedResults).forEach(([userId, quizResult]) => {
+          // Find user's socket(s) and send personal results
+          const userSockets = Array.from(socketUserMap.entries())
+            .filter(([, data]) => data.userId === userId)
+            .map(([socketId]) => socketId);
+          
+          userSockets.forEach(socketId => {
+            io.to(socketId).emit('personal-quiz-result', {
+              lobbyCode,
+              quizResult,
+              finalScores: Object.entries(userDetailedResults)
+                .sort(([, a], [, b]) => (b as QuizResultsProps).score - (a as QuizResultsProps).score)
+                .map(([userId, data]) => ({ 
+                  userId, 
+                  name: allUsers.find(u => u.id === userId)?.name || userId, 
+                  score: (data as QuizResultsProps).score 
+                }))
+            });
+          });
+        });
+
+        // Backward compatible broadcast for leaderboards
+        io.to(lobbyCode).emit('quiz-finished', {
+          lobbyCode,
+          finalScores: Object.entries(userDetailedResults)
+            .sort(([, a], [, b]) => (b as QuizResultsProps).score - (a as QuizResultsProps).score)
+            .map(([userId, data]) => ({ 
+              userId, 
+              name: allUsers.find(u => u.id === userId)?.name || userId, 
+              score: (data as QuizResultsProps).score 
+            })),
+          totalQuestions: quizData.questionCount || 0
         });
       }
 
-      lobbyUserAnswers.delete(lobbyCode);
-      lobbyQuestionIndex.delete(lobbyCode);
-      lobbyTimers.delete(lobbyCode);
-
-      // Broadcast final results to ALL users
-      io.to(lobbyCode).emit('quiz-finished', {
-        lobbyCode,
-        finalScores: Object.entries(finalScores)
-          .sort(([, a], [, b]) => b.score - a.score)
-          .map(([userId, data]) => ({ userId, ...data })),
-        totalQuestions: lobbyQuestionIndex.get(lobbyCode) || 0
-      });
-      io.to(lobbyCode).emit('question-timer-ended', { lobbyCode });
-
+      // Cleanup
+      [lobbies, lobbyQuizData, lobbyHosts, lobbyUserAnswers, lobbyQuestionIndex, lobbyTimers]
+        .forEach(map => map.delete(lobbyCode));
     });
 
     socket.on('question-timer-ended', ({ lobbyCode }) => {
-      console.log(`⏰ ${lobbyCode}: Timer ended`);
-
       const allUsers = getLobbyUsers(lobbyCode);
       const questionIndex = lobbyQuestionIndex.get(lobbyCode) || 0;
-      const timer = lobbyTimers.get(lobbyCode);
-
       // Record 0 score for ALL users who haven't answered this question
       if (!lobbyUserAnswers.has(lobbyCode)) {
         lobbyUserAnswers.set(lobbyCode, new Map());
@@ -344,22 +386,21 @@ app.prepare().then(() => {
 
       allUsers.forEach(user => {
         if (!questionAnswers.has(user.id)) {
-          // ✅ UNANSWERED = 0 score
-          questionAnswers.set(user.id, ''); // empty answer
-          console.log(`⏰ ${user.name} didn't answer Q${questionIndex} → 0 score`);
-
-          // Emit the "answered" event for unanswered users too
+          const emptyAnswerData = { answer: '', answerTime: 0, score: 0, isCorrect: false };
+          questionAnswers.set(user.id, emptyAnswerData); 
+          
           io.to(lobbyCode).emit('user-answered', {
             userId: user.id,
             questionIndex,
             answer: '',
             answeredUsers: questionAnswers.size,
-            allAnswered: true, // Now everyone has "answered"
+            allAnswered: true,
             username: user.name,
             allUsers,
             totalUsers: allUsers.length,
             score: 0,
-            answerTime: timer?.duration ? timer.duration * 1000 : 0
+            answerTime: 0,
+            isCorrect: false
           });
         }
       });
@@ -379,7 +420,7 @@ app.prepare().then(() => {
     });
 
     // Replace your disconnect handler with:
-    socket.on('disconnecting', (reason) => {
+    socket.on('disconnecting', () => {
       const userData = socketUserMap.get(socket.id);
       if (userData) {
         removeUserFromLobby(userData.lobbyCode, userData.userId);
@@ -407,11 +448,8 @@ app.prepare().then(() => {
           isRunning: true
         });
       }
-
-      // ✅ AUTO-ADVANCE WHEN TIMER HITS 0
+      //  AUTO-ADVANCE WHEN TIMER HITS 0
       if (timer.isRunning && timer.timeLeft <= 0) {
-        console.log(`⏰ ${lobbyCode}: Timer ended - auto advancing`);
-
         // 1. Record 0 scores for unanswered users
         const allUsers = getLobbyUsers(lobbyCode);
         const questionIndex = lobbyQuestionIndex.get(lobbyCode) || 0;
@@ -428,8 +466,10 @@ app.prepare().then(() => {
         // Auto-submit 0 for unanswered
         allUsers.forEach(user => {
           if (!questionAnswers.has(user.id)) {
-            questionAnswers.set(user.id, '');
-            io.to(lobbyCode).emit('user-answered', {  // ✅ Use io.to()
+            const emptyAnswerData = { answer: '', answerTime: 0, score: 0, isCorrect: false };
+            questionAnswers.set(user.id, emptyAnswerData);
+            
+            io.to(lobbyCode).emit('user-answered', {
               userId: user.id,
               questionIndex,
               answer: '',
@@ -439,7 +479,8 @@ app.prepare().then(() => {
               allUsers,
               totalUsers: allUsers.length,
               score: 0,
-              answerTime: timer.duration * 1000
+              answerTime: 0,
+              isCorrect: false
             });
           }
         });

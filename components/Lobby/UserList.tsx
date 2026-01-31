@@ -21,14 +21,14 @@ const JoinedUsers = ({ users }: JoinedUsersProps) => {
   };
 
   return (
-    <div className="glass p-6 animate-fade-in rounded-2xl" style={{ animationDelay: "0.3s" }}>
+    <div className="glass glass-border p-6 animate-fade-in rounded-2xl" style={{ animationDelay: "0.3s" }}>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Users className="w-5 h-5 text-primary" />
-          <h2 className="text-lg font-semibold text-foreground">{t("players")}</h2>
+          <h2 className="text-lg font-semibold text-textColor">{t("players")}</h2>
         </div>
         <span className="px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary">
-          {users.length} joined
+          {users.length} {t("joined")}
         </span>
       </div>
 
@@ -36,7 +36,7 @@ const JoinedUsers = ({ users }: JoinedUsersProps) => {
         {users.map((user, index) => (
           <div
             key={user.id}
-            className="glass p-3 rounded-xl flex items-center gap-3 "
+            className="glass glass-border p-3 rounded-xl flex items-center gap-3 "
             style={{ animationDelay: `${0.4 + index * 0.05}s` }}
           >
             <div
@@ -47,26 +47,19 @@ const JoinedUsers = ({ users }: JoinedUsersProps) => {
               {user.name.charAt(0).toUpperCase()}
             </div>
             <div className="flex-1">
-              <p className="font-medium text-foreground flex items-center gap-2">
+              <p className="font-medium text-textColor flex items-center gap-2">
                 {user.name}
                 {user.isHost && (
                   <Crown className="w-4 h-4 text-yellow-500" />
                 )}
               </p>
               {user.isHost && (
-                <p className="text-xs text-muted-foreground">Host</p>
+                <p className="text-xs text-textColor">{t("host")}</p>
               )}
             </div>
             <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse-soft" />
           </div>
         ))}
-
-        {users.length === 0 && (
-          <div className="text-center py-8 text-muted-foreground">
-            <Users className="w-12 h-12 mx-auto mb-3 opacity-30" />
-            <p className="text-sm">Waiting for players to join...</p>
-          </div>
-        )}
       </div>
     </div>
   );
