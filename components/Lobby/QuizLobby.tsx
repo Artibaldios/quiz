@@ -47,7 +47,7 @@ const QuizLobby = () => {
   }
 
   return (
-    <div className="py-8 px-4 relative overflow-hidden glass-border rounded-b-2xl">
+    <div className="p-4 relative overflow-hidden glass-border rounded-b-2xl">
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Header with dynamic Lobby Code */}
         <LobbyHeader lobbyCode={lobbyCode} />
@@ -79,10 +79,10 @@ const QuizLobby = () => {
           </div>
         </div>
         {hostStart && (
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center m-2 md:mb-4">
               <button
                 onClick={handleStartQuiz}
-                className="bg-primary px-8 py-3 rounded-2xl text-white font-bold text-lg mt-6 cursor-pointer"
+                className="bg-primary px-8 py-3 rounded-2xl text-white font-bold text-lg cursor-pointer"
               >
                 {t("startButton")} ({users.length} {t("players")})
               </button>

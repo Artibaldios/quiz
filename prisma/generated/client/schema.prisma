@@ -53,13 +53,14 @@ model Quiz {
 }
 
 model Question {
-  id             Int  @id @default(autoincrement())
+  id             Int     @id @default(autoincrement())
   quizId         Int
   topic          Json
   question_text  Json
   options        Json
   correct_answer Json
-  quiz           Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  image          String?
+  quiz           Quiz    @relation(fields: [quizId], references: [id], onDelete: Cascade)
 }
 
 model UserQuizResult {

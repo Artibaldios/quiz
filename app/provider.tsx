@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import React, { useState } from "react";
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { ImageKitProvider } from '@imagekit/next';
 
 interface Messages {
   [key: string]: string | Messages;
@@ -31,6 +32,9 @@ export default function Providers({ children, session, params }: Props) {
 
   return (
     <SessionProvider session={session} refetchInterval={0} refetchOnWindowFocus={false}>
+    <ImageKitProvider
+      urlEndpoint={process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT!}
+    >
       <QueryClientProvider client={queryClient}>
         <NextIntlClientProvider locale={locale} messages={localeMessages} timeZone="UTC">
           <ThemeProvider>
@@ -39,6 +43,7 @@ export default function Providers({ children, session, params }: Props) {
         </NextIntlClientProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
+      </ImageKitProvider>
     </SessionProvider>
   );
 }

@@ -300,8 +300,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 7.2.0
-   * Query Engine version: 0c8ef2ce45c83248ab3df073180d5eda9e8be7a3
+   * Prisma Client JS version: 7.3.0
+   * Query Engine version: 9d6ad21cbbceab97458517b147a6a09ff43aa735
    */
   export type PrismaVersion = {
     client: string
@@ -6017,11 +6017,13 @@ export namespace Prisma {
   export type QuestionMinAggregateOutputType = {
     id: number | null
     quizId: number | null
+    image: string | null
   }
 
   export type QuestionMaxAggregateOutputType = {
     id: number | null
     quizId: number | null
+    image: string | null
   }
 
   export type QuestionCountAggregateOutputType = {
@@ -6031,6 +6033,7 @@ export namespace Prisma {
     question_text: number
     options: number
     correct_answer: number
+    image: number
     _all: number
   }
 
@@ -6048,11 +6051,13 @@ export namespace Prisma {
   export type QuestionMinAggregateInputType = {
     id?: true
     quizId?: true
+    image?: true
   }
 
   export type QuestionMaxAggregateInputType = {
     id?: true
     quizId?: true
+    image?: true
   }
 
   export type QuestionCountAggregateInputType = {
@@ -6062,6 +6067,7 @@ export namespace Prisma {
     question_text?: true
     options?: true
     correct_answer?: true
+    image?: true
     _all?: true
   }
 
@@ -6158,6 +6164,7 @@ export namespace Prisma {
     question_text: JsonValue
     options: JsonValue
     correct_answer: JsonValue
+    image: string | null
     _count: QuestionCountAggregateOutputType | null
     _avg: QuestionAvgAggregateOutputType | null
     _sum: QuestionSumAggregateOutputType | null
@@ -6186,6 +6193,7 @@ export namespace Prisma {
     question_text?: boolean
     options?: boolean
     correct_answer?: boolean
+    image?: boolean
     quiz?: boolean | QuizDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["question"]>
 
@@ -6196,6 +6204,7 @@ export namespace Prisma {
     question_text?: boolean
     options?: boolean
     correct_answer?: boolean
+    image?: boolean
     quiz?: boolean | QuizDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["question"]>
 
@@ -6206,6 +6215,7 @@ export namespace Prisma {
     question_text?: boolean
     options?: boolean
     correct_answer?: boolean
+    image?: boolean
     quiz?: boolean | QuizDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["question"]>
 
@@ -6216,9 +6226,10 @@ export namespace Prisma {
     question_text?: boolean
     options?: boolean
     correct_answer?: boolean
+    image?: boolean
   }
 
-  export type QuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "quizId" | "topic" | "question_text" | "options" | "correct_answer", ExtArgs["result"]["question"]>
+  export type QuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "quizId" | "topic" | "question_text" | "options" | "correct_answer" | "image", ExtArgs["result"]["question"]>
   export type QuestionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     quiz?: boolean | QuizDefaultArgs<ExtArgs>
   }
@@ -6241,6 +6252,7 @@ export namespace Prisma {
       question_text: Prisma.JsonValue
       options: Prisma.JsonValue
       correct_answer: Prisma.JsonValue
+      image: string | null
     }, ExtArgs["result"]["question"]>
     composites: {}
   }
@@ -6671,6 +6683,7 @@ export namespace Prisma {
     readonly question_text: FieldRef<"Question", 'Json'>
     readonly options: FieldRef<"Question", 'Json'>
     readonly correct_answer: FieldRef<"Question", 'Json'>
+    readonly image: FieldRef<"Question", 'String'>
   }
     
 
@@ -10415,7 +10428,8 @@ export namespace Prisma {
     topic: 'topic',
     question_text: 'question_text',
     options: 'options',
-    correct_answer: 'correct_answer'
+    correct_answer: 'correct_answer',
+    image: 'image'
   };
 
   export type QuestionScalarFieldEnum = (typeof QuestionScalarFieldEnum)[keyof typeof QuestionScalarFieldEnum]
@@ -10857,6 +10871,7 @@ export namespace Prisma {
     question_text?: JsonFilter<"Question">
     options?: JsonFilter<"Question">
     correct_answer?: JsonFilter<"Question">
+    image?: StringNullableFilter<"Question"> | string | null
     quiz?: XOR<QuizScalarRelationFilter, QuizWhereInput>
   }
 
@@ -10867,6 +10882,7 @@ export namespace Prisma {
     question_text?: SortOrder
     options?: SortOrder
     correct_answer?: SortOrder
+    image?: SortOrderInput | SortOrder
     quiz?: QuizOrderByWithRelationInput
   }
 
@@ -10880,6 +10896,7 @@ export namespace Prisma {
     question_text?: JsonFilter<"Question">
     options?: JsonFilter<"Question">
     correct_answer?: JsonFilter<"Question">
+    image?: StringNullableFilter<"Question"> | string | null
     quiz?: XOR<QuizScalarRelationFilter, QuizWhereInput>
   }, "id">
 
@@ -10890,6 +10907,7 @@ export namespace Prisma {
     question_text?: SortOrder
     options?: SortOrder
     correct_answer?: SortOrder
+    image?: SortOrderInput | SortOrder
     _count?: QuestionCountOrderByAggregateInput
     _avg?: QuestionAvgOrderByAggregateInput
     _max?: QuestionMaxOrderByAggregateInput
@@ -10907,6 +10925,7 @@ export namespace Prisma {
     question_text?: JsonWithAggregatesFilter<"Question">
     options?: JsonWithAggregatesFilter<"Question">
     correct_answer?: JsonWithAggregatesFilter<"Question">
+    image?: StringNullableWithAggregatesFilter<"Question"> | string | null
   }
 
   export type UserQuizResultWhereInput = {
@@ -11366,6 +11385,7 @@ export namespace Prisma {
     question_text: JsonNullValueInput | InputJsonValue
     options: JsonNullValueInput | InputJsonValue
     correct_answer: JsonNullValueInput | InputJsonValue
+    image?: string | null
     quiz: QuizCreateNestedOneWithoutQuestionsInput
   }
 
@@ -11376,6 +11396,7 @@ export namespace Prisma {
     question_text: JsonNullValueInput | InputJsonValue
     options: JsonNullValueInput | InputJsonValue
     correct_answer: JsonNullValueInput | InputJsonValue
+    image?: string | null
   }
 
   export type QuestionUpdateInput = {
@@ -11383,6 +11404,7 @@ export namespace Prisma {
     question_text?: JsonNullValueInput | InputJsonValue
     options?: JsonNullValueInput | InputJsonValue
     correct_answer?: JsonNullValueInput | InputJsonValue
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     quiz?: QuizUpdateOneRequiredWithoutQuestionsNestedInput
   }
 
@@ -11393,6 +11415,7 @@ export namespace Prisma {
     question_text?: JsonNullValueInput | InputJsonValue
     options?: JsonNullValueInput | InputJsonValue
     correct_answer?: JsonNullValueInput | InputJsonValue
+    image?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuestionCreateManyInput = {
@@ -11402,6 +11425,7 @@ export namespace Prisma {
     question_text: JsonNullValueInput | InputJsonValue
     options: JsonNullValueInput | InputJsonValue
     correct_answer: JsonNullValueInput | InputJsonValue
+    image?: string | null
   }
 
   export type QuestionUpdateManyMutationInput = {
@@ -11409,6 +11433,7 @@ export namespace Prisma {
     question_text?: JsonNullValueInput | InputJsonValue
     options?: JsonNullValueInput | InputJsonValue
     correct_answer?: JsonNullValueInput | InputJsonValue
+    image?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuestionUncheckedUpdateManyInput = {
@@ -11418,6 +11443,7 @@ export namespace Prisma {
     question_text?: JsonNullValueInput | InputJsonValue
     options?: JsonNullValueInput | InputJsonValue
     correct_answer?: JsonNullValueInput | InputJsonValue
+    image?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserQuizResultCreateInput = {
@@ -12021,6 +12047,7 @@ export namespace Prisma {
     question_text?: SortOrder
     options?: SortOrder
     correct_answer?: SortOrder
+    image?: SortOrder
   }
 
   export type QuestionAvgOrderByAggregateInput = {
@@ -12031,11 +12058,13 @@ export namespace Prisma {
   export type QuestionMaxOrderByAggregateInput = {
     id?: SortOrder
     quizId?: SortOrder
+    image?: SortOrder
   }
 
   export type QuestionMinOrderByAggregateInput = {
     id?: SortOrder
     quizId?: SortOrder
+    image?: SortOrder
   }
 
   export type QuestionSumOrderByAggregateInput = {
@@ -12835,6 +12864,7 @@ export namespace Prisma {
     question_text: JsonNullValueInput | InputJsonValue
     options: JsonNullValueInput | InputJsonValue
     correct_answer: JsonNullValueInput | InputJsonValue
+    image?: string | null
   }
 
   export type QuestionUncheckedCreateWithoutQuizInput = {
@@ -12843,6 +12873,7 @@ export namespace Prisma {
     question_text: JsonNullValueInput | InputJsonValue
     options: JsonNullValueInput | InputJsonValue
     correct_answer: JsonNullValueInput | InputJsonValue
+    image?: string | null
   }
 
   export type QuestionCreateOrConnectWithoutQuizInput = {
@@ -12881,6 +12912,7 @@ export namespace Prisma {
     question_text?: JsonFilter<"Question">
     options?: JsonFilter<"Question">
     correct_answer?: JsonFilter<"Question">
+    image?: StringNullableFilter<"Question"> | string | null
   }
 
   export type QuizCreateWithoutQuestionsInput = {
@@ -13176,6 +13208,7 @@ export namespace Prisma {
     question_text: JsonNullValueInput | InputJsonValue
     options: JsonNullValueInput | InputJsonValue
     correct_answer: JsonNullValueInput | InputJsonValue
+    image?: string | null
   }
 
   export type QuestionUpdateWithoutQuizInput = {
@@ -13183,6 +13216,7 @@ export namespace Prisma {
     question_text?: JsonNullValueInput | InputJsonValue
     options?: JsonNullValueInput | InputJsonValue
     correct_answer?: JsonNullValueInput | InputJsonValue
+    image?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuestionUncheckedUpdateWithoutQuizInput = {
@@ -13191,6 +13225,7 @@ export namespace Prisma {
     question_text?: JsonNullValueInput | InputJsonValue
     options?: JsonNullValueInput | InputJsonValue
     correct_answer?: JsonNullValueInput | InputJsonValue
+    image?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuestionUncheckedUpdateManyWithoutQuizInput = {
@@ -13199,6 +13234,7 @@ export namespace Prisma {
     question_text?: JsonNullValueInput | InputJsonValue
     options?: JsonNullValueInput | InputJsonValue
     correct_answer?: JsonNullValueInput | InputJsonValue
+    image?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserAnswerCreateManyUserQuizResultInput = {

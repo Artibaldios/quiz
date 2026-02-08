@@ -11,6 +11,7 @@ interface DbQuizQuestion {
   question_text: JsonValue | null;
   options: JsonValue | null;
   correct_answer: JsonValue | null;
+  image: string | null;
 }
 interface LocalizedText {
   en: string;
@@ -83,6 +84,7 @@ export async function GET(
         question_text: question_text[lang as Lang] || question_text.en,
         options,
         correct_answer: correct_answer[lang as Lang] || correct_answer.en,
+        image: q.image ?? null
       };
     });
 

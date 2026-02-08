@@ -59,6 +59,7 @@ model Question {
   question_text  Json
   options        Json
   correct_answer Json
+  image          String?
   quiz           Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
 }
 

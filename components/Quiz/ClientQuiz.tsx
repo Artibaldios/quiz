@@ -22,12 +22,12 @@ export default function QuizPage() {
   if (error || !quiz) return <ErrorUI message="Quiz not found"/>;
 
   return (
-    <div className="flex flex-col justify-center items-center max-w-full m-2 p-2">
+    <div className="flex flex-col justify-center items-center max-w-full m-2">
       {showCurrentResults || quizFinished ? null : (
         <QuizTimer />
       )} 
       
-      <QuizHeader quiz={quiz}/>
+      {/* <QuizHeader quiz={quiz}/> */}
       {quizFinished ? (
         <FinalResults />
       ) : showCurrentResults ? (

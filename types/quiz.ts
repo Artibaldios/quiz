@@ -12,6 +12,7 @@ export interface FetchedQuizData {
     question_text: string;
     options: string[];
     correct_answer: string;
+    image?: string;
   }[]
 }
 

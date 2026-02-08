@@ -73,9 +73,6 @@ export default function QuizResults() {
           <thead>
             <motion.tr 
               className="bg-primary"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
             >
               <th className="px-6 py-4 text-left text-xs font-bold text-white dark:text-textColor uppercase border-primary border-b-0 border-l-0 last:border-r-0">
                 {t("player")}
@@ -91,12 +88,6 @@ export default function QuizResults() {
                 <motion.tr 
                   key={`${userId}-${username}-${index}`} // Stable key with index fallback
                   className="transition-colors"
-                  variants={rowVariants}
-                  custom={index}
-                  initial="hidden"
-                  animate="visible"
-                  exit={{ opacity: 0, y: 20, }}
-                  transition={{ duration: 0.3 }}
                 >
                   <td className="px-2 py-4 whitespace-nowrap md:px-6">
                     <div className="flex items-center gap-3">
