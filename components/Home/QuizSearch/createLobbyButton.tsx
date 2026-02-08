@@ -25,8 +25,7 @@ export default function CreateLobbyButton({ quizId }: { quizId: number }) {
     }
 
     const lobby = await response.json();
-    router.push(`${locale}/lobby/${lobby.code}?quizId=${quizId}`);
-
+    router.replace(`/${locale}/lobby/${lobby.code}?quizId=${quizId}`);
     setLoading(false);
   };
 
