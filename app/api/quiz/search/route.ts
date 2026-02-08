@@ -16,15 +16,23 @@ export async function GET(req: NextRequest) {
   const lang: Lang = ['en', 'ru'].includes(langParam) ? langParam as Lang : 'en';
   const { searchParams } = req.nextUrl;
   const q = searchParams.get('q');
+  const pageParam = searchParams.get('page') || '1';
+  const limitParam = searchParams.get('limit') || '9';
+  
+  const page = Math.max(1, parseInt(pageParam));
+  const limit = parseInt(limitParam);
+  const skip = (page - 1) * limit;
 
   if (!q || typeof q !== 'string') {
     return NextResponse.json({ error: 'Query parameter "q" is required and must be a string' }, { status: 400 });
   }
+
   const detectedLang: Lang = detectLanguage(q);
   if (lang !== detectedLang) {
-    return NextResponse.json([], { status: 201 });
+    return NextResponse.json({ results: [], hasMore: false }, { status: 201 });
   }
-  // Use your Prisma search with `q` here, for example:
+
+  // Fetch limit + 1 to check if more results exist
   const results = await prisma.quiz.findMany({
     where: {
       title: {
@@ -33,7 +41,9 @@ export async function GET(req: NextRequest) {
         mode: 'insensitive'
       }
     },
-    take: 10,
+    skip,
+    take: limit + 1, // +1 to detect if more results exist
+    orderBy: { createdAt: 'desc' } // Add consistent ordering
   });
 
   // Reusable localized text extractor (works for title, category, etc.)
@@ -47,12 +57,20 @@ export async function GET(req: NextRequest) {
       localized.ru ?? localized.en ?? 'No text' : 
       localized.en ?? 'No text';
   };
+
   const mapLocalizedQuiz = (quiz: Quiz, lang: Lang) => ({
     ...quiz,
     title: getLocalizedText(quiz.title as JsonTitle, lang),
     category: getLocalizedText(quiz.category as JsonTitle, lang)
   });
 
-  const localizedQuizzes = results.map(q => mapLocalizedQuiz(q, lang));
-  return NextResponse.json(localizedQuizzes, { status: 201 });
+  // Check if more results exist
+  const hasMore = results.length > limit;
+  const paginatedResults = hasMore ? results.slice(0, limit) : results;
+  const localizedQuizzes = paginatedResults.map(q => mapLocalizedQuiz(q, lang));
+
+  return NextResponse.json({ 
+    results: localizedQuizzes, 
+    hasMore 
+  }, { status: 200 });
 }

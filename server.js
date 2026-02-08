@@ -2,7 +2,7 @@ import { createServer } from 'http';
 import { Server as IOServer } from 'socket.io';
 import Next from 'next';
 import { parse } from 'url';
-import { calculateQuizResult } from './utils/helpers.js';
+import { calculateQuizResult } from './utils/server-helper.js';
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = '0.0.0.0';
@@ -57,28 +57,6 @@ const removeUserFromLobby = (lobbyCode, userId) => {
   lobbies.set(lobbyCode, updatedUsers);
 };
 
-function cleanupStaleLobbies() {
-  lobbies.forEach((users, lobbyCode) => {
-    // Delete if:
-    // 1. Empty lobby (no users)
-    // 2. No one connected to room for 5+ minutes
-    const roomSockets = io.sockets.adapter.rooms.get(lobbyCode);
-    const hasActiveSockets = roomSockets && roomSockets.size > 0;
-    const isStale = !hasActiveSockets || users.length === 0;
-
-    if (isStale) {
-      console.log(`🧹 Auto-cleaning stale lobby ${lobbyCode}`);
-      lobbies.delete(lobbyCode);
-      lobbyHosts.delete(lobbyCode);
-      lobbyUserAnswers.delete(lobbyCode);
-      lobbyQuestionIndex.delete(lobbyCode);
-      lobbyTimers.delete(lobbyCode);
-    }
-  });
-}
-
-// Run every 30 seconds
-setInterval(cleanupStaleLobbies, 30000);
 
 const app = Next({ dev, hostname, port });
 const handle = app.getRequestHandler();
@@ -144,8 +122,9 @@ app.prepare().then(() => {
     });
 
     socket.on('start-quiz', ({ lobbyCode, quizData, settings, quizId }) => {
+      [lobbyUserAnswers, lobbyQuestionIndex, lobbyTimers, lobbyQuizData].forEach(map => map.delete(lobbyCode));
+
       lobbyQuizData.set(lobbyCode, quizData);
-      lobbyUserAnswers.delete(lobbyCode);
       lobbyQuestionIndex.set(lobbyCode, 0);
 
       const allUsers = getLobbyUsers(lobbyCode);
@@ -163,6 +142,7 @@ app.prepare().then(() => {
         pauseStartTime: null
       });
 
+      io.to(lobbyCode).emit('quiz-state-reset', { lobbyCode });
       // ✅ Broadcast INITIAL STATE to ALL users
       io.to(lobbyCode).emit('quiz-initialized', {
         lobbyCode,
@@ -502,6 +482,25 @@ app.prepare().then(() => {
       }
     });
   }, 1000);
+
+  const cleanupStaleLobbies = () => {
+    lobbies.forEach((users, lobbyCode) => {
+      const roomSockets = io?.sockets.adapter.rooms.get(lobbyCode);
+      const hasActiveSockets = roomSockets && roomSockets.size > 0;
+      const isStale = !hasActiveSockets || users.length === 0;
+
+      if (isStale) {
+        console.log(`🧹 Auto-cleaning stale lobby ${lobbyCode}`);
+        lobbies.delete(lobbyCode);
+        lobbyHosts.delete(lobbyCode);
+        lobbyUserAnswers.delete(lobbyCode);
+        lobbyQuestionIndex.delete(lobbyCode);
+        lobbyTimers.delete(lobbyCode);
+      }
+    });
+  };
+
+  setInterval(cleanupStaleLobbies, 30000);
 
   httpServer.listen(port, hostname, () => {
     console.log(`🌐 Next.js + Socket.IO Ready on http://${hostname}:${port}`);

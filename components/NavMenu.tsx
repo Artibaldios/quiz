@@ -3,16 +3,33 @@
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { User, Menu, X, LogOut } from "lucide-react";
+import { User, Menu, X, LogOut, SquareMenu , ChevronDown } from "lucide-react";
 import LocaleSwitcher from "./LocaleSwitcher";
 import ThemeSwitcher from "./ThemeSwitcher";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+
+
+const categoryList = [
+  { key: 'food' },
+  { key: 'travel' },
+  { key: 'science' },
+  { key: 'general' },
+  { key: 'music' },
+  { key: 'films' },
+  { key: 'sport' },
+  { key: 'art' },
+];
 
 export const NavMenu = () => {
   const { data: session } = useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const locale = useLocale();
+  const router = useRouter();
   const t = useTranslations("navMenu");
+  const tC = useTranslations("categories");
 
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
   const toggleProfileMenu = () => setProfileMenuOpen(!profileMenuOpen);
@@ -140,8 +157,47 @@ export const NavMenu = () => {
                   <User className="w-5 h-5 shrink-0" />
                   <span>{t("profile")}</span>
                 </Link>
-                <ThemeSwitcher text={true} />
-                <LocaleSwitcher text={true} />
+              </div>
+            ) : null}
+            
+            {/* Categories Section */}
+            <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
+              <button
+                onClick={() => setCategoriesOpen(!categoriesOpen)}
+                className="flex items-center justify-between w-full px-4 py-3 text-textColor rounded-xl hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-all duration-200 cursor-pointer"
+              >
+                <div className="flex items-center space-x-3">
+                  <SquareMenu className="w-5 h-5 shrink-0" />
+                  <span>{t("categories")}</span>
+                </div>
+                <ChevronDown className={`w-5 h-5 shrink-0 transition-transform duration-200 ${categoriesOpen ? 'rotate-180' : ''}`} />
+              </button>
+              
+              {categoriesOpen && (
+                <div className="pl-8 space-y-2 animate-in slide-in-from-top-2 duration-200">
+                  {categoryList.map((category) => (
+                    <button
+                      key={category.key}
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50/50 dark:hover:bg-blue-500/10 rounded-lg transition-all duration-150"
+                      onClick={() => {
+                        router.push(`/${locale}/${category.key}`);
+                        setCategoriesOpen(false);
+                        setMobileMenuOpen(false);
+                      }}
+                    >
+                      {tC(`${category.key}`)}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Theme & Locale (always visible, moved above conditional content) */}
+            <ThemeSwitcher text={true} />
+            <LocaleSwitcher text={true} />
+            
+            {session ? (
+              <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
                 <button
                   onClick={() => {
                     signOut();
@@ -154,9 +210,7 @@ export const NavMenu = () => {
                 </button>
               </div>
             ) : (
-              <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                <ThemeSwitcher text={true} />
-                <LocaleSwitcher text={true} />
+              <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
                 <button
                   onClick={() => {
                     signIn();

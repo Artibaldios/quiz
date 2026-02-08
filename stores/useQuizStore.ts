@@ -81,28 +81,27 @@ export const useQuizStore = create<QuizState>((set, get) => ({
     socket?.emit('leave-lobby', { lobbyCode });
   },
 
-  startQuiz: (lobbyCode: string, quizData: FetchedQuizData, settings: LobbySettings, quizId) => {
+  startQuiz: (lobbyCode: string, quizData: FetchedQuizData, settings: LobbySettings, quizId: string) => {
     const socket = get().socket;
     if (socket?.connected) {
       set({
-        // Quiz progress
-        currentQuestionIndex: 0,
+        //  FORCE FULL RESET
         quizFinished: false,
-        showCurrentResults: false,
-        // Timer
-        timer: settings.questionTimer || 15,
-        isTimerRunning: false,
-        totalPausedTime: 0,
-        // Results - FULL CLEANUP
-        currentAnsweredUsersMap: new Map(),
-        currentQuestionResults: [],
-        allQuizResults: {},
         finalResults: undefined,
-        // Quiz data
+        quizResult: undefined,
+        showCurrentResults: false,
+        currentQuestionResults: [],
+        currentAnsweredUsersMap: new Map(),
+        allQuizResults: {},
+        
+        // New quiz state
+        currentQuestionIndex: 0,
         quizData,
         totalQuestions: quizData.questionCount,
         settings,
-        quizId
+        quizId,
+        timer: settings.questionTimer || 15,
+        isTimerRunning: false
       });
       socket.emit('start-quiz', { lobbyCode, quizData, settings, quizId });
     }
@@ -139,7 +138,7 @@ export const useQuizStore = create<QuizState>((set, get) => ({
   continueQuiz: () => {
     const { socket, lobbyCode, hostId, currentQuestionIndex, totalQuestions } = get();
 
-    if (currentQuestionIndex >= totalQuestions - 2) {
+    if (currentQuestionIndex >= totalQuestions - 1) {
       get().finishQuiz();
       return;
     }

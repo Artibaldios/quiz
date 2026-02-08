@@ -2,7 +2,7 @@ import { createServer } from 'http';
 import { Server as IOServer } from 'socket.io';
 import Next from 'next';
 import { parse } from 'url';
-import type { FetchedQuizData, User } from './types/quiz'; // Adjust path to your types
+import type { FetchedQuizData, User } from './types/quiz';
 import { calculateQuizResult, QuizResultsProps } from './utils/helpers';
 
 const dev = process.env.NODE_ENV !== 'production';
@@ -125,15 +125,15 @@ app.prepare().then(() => {
         hostId: lobbyHosts.get(lobbyCode) || userId
       };
 
-      console.log(`📤 lobby-joined: ${lobbyData.users.length} users, host: ${lobbyData.hostId}`);
       io.to(lobbyCode).emit('lobby-joined', lobbyData);
       socket.to(lobbyCode).emit('user-joined', newUser);
     });
 
 
     socket.on('start-quiz', ({ lobbyCode, quizData, settings, quizId}) => {
+      [lobbyUserAnswers, lobbyQuestionIndex, lobbyTimers, lobbyQuizData].forEach(map => map.delete(lobbyCode));
+
       lobbyQuizData.set(lobbyCode, quizData);
-      lobbyUserAnswers.delete(lobbyCode);
       lobbyQuestionIndex.set(lobbyCode, 0);
 
       const allUsers = getLobbyUsers(lobbyCode);
@@ -150,7 +150,7 @@ app.prepare().then(() => {
         totalPausedTime: 0,
         pauseStartTime: null
       });
-
+      io.to(lobbyCode).emit('quiz-state-reset', { lobbyCode });
       // ✅ Broadcast INITIAL STATE to ALL users
       io.to(lobbyCode).emit('quiz-initialized', {
         lobbyCode,

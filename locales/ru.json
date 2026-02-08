@@ -96,7 +96,8 @@
     "darkTheme": "Темная тема",
     "language": "Language",
     "logout": "Выйти",
-    "SignIn": "Войти"
+    "SignIn": "Войти",
+    "categories": "Категории"
   },
   "LocaleSwitcher": {
     "locale": "Язык: Русский"
@@ -116,5 +117,16 @@
     "enterEmail": "Введите email",
     "createPassword": "Создайте пароль",
     "createAccount": "Зарегистрироваться"
+  },
+  "categories": {
+    "food": "Еда",
+    "travel": "Путешествия", 
+    "science": "Наука",
+    "general": "Общеее",
+    "music": "Музыка",
+    "films": "Фильмы",
+    "sport": "Спорт",
+    "literature": "Литература",
+    "art": "Искусство"
   }
 }

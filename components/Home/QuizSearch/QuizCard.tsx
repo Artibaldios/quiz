@@ -2,20 +2,12 @@ import React from 'react';
 import { formatRelativeDate, getLevelConfig, type LevelConfig, type QuizCardProps } from '@/utils/helpers';
 import { useLocale, useTranslations } from 'next-intl';
 import {
-  Brain,
-  Globe,
-  Star,
-  Coffee,
-  Film,
-  Music,
   HelpCircle,
   Users,
-  Book,
-  Palette,
-  Volleyball,
-  Cpu
 } from 'lucide-react';
 import CreateLobbyButton from './createLobbyButton';
+import CategoryIcon from './CategoryIcon';
+
 const QuizCard: React.FC<QuizCardProps> = ({
   title,
   category,
@@ -27,7 +19,7 @@ const QuizCard: React.FC<QuizCardProps> = ({
 }) => {
   const t = useTranslations("quizCard");
   const locale = useLocale();
-  const levelConfig: LevelConfig = getLevelConfig(level, locale);
+  const levelConfig: LevelConfig = getLevelConfig(level as string, locale);
   return (
     <div className="group relative">
       {/* Animated background gradient */}
@@ -46,7 +38,7 @@ const QuizCard: React.FC<QuizCardProps> = ({
             w-10 h-10 rounded-xl bg-linear-to-r from-blue-600 to-blue-500  flex items-center justify-center
             shadow-lg transform transition-transform duration-300
           `}>
-            <CategoryIcon category={category} />
+            <CategoryIcon category={category} className='text-white'/>
 
           </div>
 
@@ -83,37 +75,4 @@ const QuizCard: React.FC<QuizCardProps> = ({
   );
 };
 
-// Category to icon mapping
-const categoryIcons: Record<string, React.ElementType> = {
-  'food': Coffee,
-  'еда': Coffee,
-  'travel': Globe,
-  'путешествия': Globe,
-  'science': Brain,
-  'наука': Brain,
-  'general': Star,
-  'общее': Star,
-  'music': Music,
-  'музыка': Music,
-  'films': Film,
-  'фильмы': Film,
-  'sport': Volleyball,
-  'спорт': Volleyball,
-  'literature': Book,
-  'литература': Book,
-  'art': Palette,
-  'искусство': Palette,
-  'technology': Cpu,
-  'технологии': Cpu,
-};
-
-const CategoryIcon = ({ category }: { category: string }) => {
-  // Normalize category (lowercase, trim)
-  const normalizedCategory = category.toLowerCase().trim();
-
-  // Default fallback icon
-  const IconComponent = categoryIcons[normalizedCategory] || Star;
-
-  return <IconComponent className="w-5 h-5 text-white" />;
-};
 export default QuizCard;

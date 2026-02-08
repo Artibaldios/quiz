@@ -32,10 +32,10 @@ export interface QuizCardProps {
   id: number;
   title: string;
   category: string;
-  level?: 'easy' | 'medium' | 'hard';
+  level?: string | undefined | null;
   questionCount: number;
   plays: number;
-  createdAt: string;
+  createdAt: Date;
 }
 
 // Pure function to calculate quiz results locally
@@ -81,7 +81,7 @@ export function calculateQuizResult(questions: Question[], answers: string[], po
   };
 }
 
-export const formatRelativeDate = (date: string, locale: string): string => {
+export const formatRelativeDate = (date: Date, locale: string): string => {
   const now = new Date();
   const target = new Date(date);
   
@@ -139,9 +139,9 @@ export interface LevelConfig {
   border: string;
   text: string;
   icon: string;
-  level: string;
+  level: LevelKey;
 };
-type LevelKey = 'easy' | 'medium' | 'hard';
+type LevelKey = string | "medium";
 
 const levelConfigs: Record<string, Record<LevelKey | 'default', LevelConfig>> = {
   ru: {

@@ -96,7 +96,8 @@
     "darkTheme": "Dark Theme",
     "language": "Language",
     "logout": "Logout",
-    "SignIn": "Sign In"
+    "SignIn": "Sign In",
+    "categories": "Categories"
   },
   "LocaleSwitcher": {
     "locale": "Language: English"
@@ -116,5 +117,16 @@
     "enterEmail": "Enter your email",
     "createPassword": "Create a password",
     "createAccount": "Create Account"
+  },
+  "categories": {
+    "food": "Food",
+    "travel": "Travel", 
+    "science": "Science",
+    "general": "General",
+    "music": "Music",
+    "films": "Films",
+    "sport": "Sport",
+    "literature": "Literature",
+    "art": "Art"
   }
 }

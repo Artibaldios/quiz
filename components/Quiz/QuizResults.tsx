@@ -69,7 +69,7 @@ export default function QuizResults() {
     >
       {/* Current Question Results Table */}
       <div className="overflow-x-auto rounded-t-xl mb-8">
-        <table className="w-full dark:bg-gray-900 bg-bgContent shadow-lg border-none border-collapse">
+        <table className="w-full dark:bg-gray-900 bg-bgContent shadow-lg table-reset border-collapse">
           <thead>
             <motion.tr 
               className="bg-primary"
@@ -77,10 +77,10 @@ export default function QuizResults() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <th className="px-6 py-4 text-left text-xs font-bold text-white dark:text-textColor uppercase">
+              <th className="px-6 py-4 text-left text-xs font-bold text-white dark:text-textColor uppercase border-primary border-b-0 border-l-0 last:border-r-0">
                 {t("player")}
               </th>
-              <th className="px-6 py-4 text-right text-xs font-bold text-white dark:text-textColor uppercase">
+              <th className="px-6 py-4 text-right text-xs font-bold text-white dark:text-textColor uppercase border-primary border-b-0 border-l-0 last:border-r-0">
                 {t("score")}
               </th>
             </motion.tr>
